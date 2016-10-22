@@ -10,7 +10,7 @@ func checkRootKey(rootKey string) bool {
 }
 
 // ensure key, return (realKey, parentKey)
-func (clt *EtcdV3HierarchyClient) ensureKey(key string) (string, string) {
+func (clt *EtcdHRCHYClient) ensureKey(key string) (string, string) {
 	key = clt.rootKey + strings.Trim(key, "/")
 	parentKey := path.Clean(key + "/../")
 	return key, parentKey

@@ -49,7 +49,7 @@ func main() {
 	router.Run(":" + config.Port)
 }
 
-func initClient(config *conf.Config) (*client.EtcdV3HierarchyClient, error) {
+func initClient(config *conf.Config) (*client.EtcdHRCHYClient, error) {
 	clt, err := clientv3.New(clientv3.Config{
 		Endpoints: config.EtcdEndPoints,
 		Username:  config.EtcdUsername,

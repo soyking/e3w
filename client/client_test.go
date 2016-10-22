@@ -14,7 +14,7 @@ const (
 func Test(t *testing.T) { TestingT(t) }
 
 var (
-	client *EtcdV3HierarchyClient
+	client *EtcdHRCHYClient
 )
 
 func init() {

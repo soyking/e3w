@@ -7,7 +7,7 @@ import (
 )
 
 // list a directory
-func (clt *EtcdV3HierarchyClient) List(key string) ([]*Node, error) {
+func (clt *EtcdHRCHYClient) List(key string) ([]*Node, error) {
 	key, _ = clt.ensureKey(key)
 	// directory start with /
 	dir := key + "/"
@@ -43,7 +43,7 @@ func (clt *EtcdV3HierarchyClient) List(key string) ([]*Node, error) {
 }
 
 // pick key/value under the dir
-func (clt *EtcdV3HierarchyClient) list(dir string, kvs []*mvccpb.KeyValue) ([]*Node, error) {
+func (clt *EtcdHRCHYClient) list(dir string, kvs []*mvccpb.KeyValue) ([]*Node, error) {
 	nodes := []*Node{}
 	for _, kv := range kvs {
 		name := strings.TrimPrefix(string(kv.Value), dir)

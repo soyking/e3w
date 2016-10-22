@@ -18,7 +18,8 @@ var (
 	ErrorListKey        = errors.New("can only list a directory")
 )
 
-type EtcdV3HierarchyClient struct {
+// etcd v3 client with Hierarchy
+type EtcdHRCHYClient struct {
 	client *clientv3.Client
 	ctx    context.Context
 	// root key as root directory
@@ -27,7 +28,7 @@ type EtcdV3HierarchyClient struct {
 	dirValue string
 }
 
-func New(clt *clientv3.Client, rootKey string, dirValue ...string) (*EtcdV3HierarchyClient, error) {
+func New(clt *clientv3.Client, rootKey string, dirValue ...string) (*EtcdHRCHYClient, error) {
 	if !checkRootKey(rootKey) {
 		return nil, ErrorInvalidRootKey
 	}
@@ -37,7 +38,7 @@ func New(clt *clientv3.Client, rootKey string, dirValue ...string) (*EtcdV3Hiera
 		d = dirValue[0]
 	}
 
-	return &EtcdV3HierarchyClient{
+	return &EtcdHRCHYClient{
 		client:   clt,
 		rootKey:  rootKey,
 		dirValue: d,
@@ -46,7 +47,7 @@ func New(clt *clientv3.Client, rootKey string, dirValue ...string) (*EtcdV3Hiera
 }
 
 // make sure the rootKey is a directory
-func (clt *EtcdV3HierarchyClient) FormatRootKey() error {
+func (clt *EtcdHRCHYClient) FormatRootKey() error {
 	_, err := clt.client.Put(clt.ctx, clt.rootKey, clt.dirValue)
 	return err
 }
@@ -56,11 +57,11 @@ type Node struct {
 	IsDir bool
 }
 
-func (clt *EtcdV3HierarchyClient) isDir(value []byte) bool {
+func (clt *EtcdHRCHYClient) isDir(value []byte) bool {
 	return string(value) == clt.dirValue
 }
 
-func (clt *EtcdV3HierarchyClient) createNode(kv *mvccpb.KeyValue) *Node {
+func (clt *EtcdHRCHYClient) createNode(kv *mvccpb.KeyValue) *Node {
 	return &Node{
 		KeyValue: kv,
 		IsDir:    clt.isDir(kv.Value),

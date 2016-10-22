@@ -5,7 +5,7 @@ import (
 )
 
 // list a directory
-func (clt *EtcdV3HierarchyClient) Delete(key string) error {
+func (clt *EtcdHRCHYClient) Delete(key string) error {
 	key, _ = clt.ensureKey(key)
 	// directory start with /
 	dir := key + "/"

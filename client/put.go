@@ -3,12 +3,12 @@ package client
 import "github.com/coreos/etcd/clientv3"
 
 
-func (clt *EtcdV3HierarchyClient) PutDir(key string) error {
+func (clt *EtcdHRCHYClient) PutDir(key string) error {
 	return clt.Put(key,clt.dirValue)
 }
 
 // set kv or directory
-func (clt *EtcdV3HierarchyClient) Put(key string, value string) error {
+func (clt *EtcdHRCHYClient) Put(key string, value string) error {
 	key, parentKey := clt.ensureKey(key)
 
 	txn := clt.client.Txn(clt.ctx)

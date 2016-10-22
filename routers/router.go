@@ -5,7 +5,7 @@ import (
 	"github.com/soyking/e3w/client"
 )
 
-func InitRouters(g *gin.Engine, client *client.EtcdV3HierarchyClient) {
+func InitRouters(g *gin.Engine, client *client.EtcdHRCHYClient) {
 	g.GET("/kv/*key", resp(getKeyHandler(client)))
 	g.PUT("/kv/*key", resp(putKeyHandler(client)))
 	g.DELETE("/kv/*key", resp(delKeyHandler(client)))
