@@ -3,7 +3,7 @@ package client
 import (
 	"errors"
 	"github.com/coreos/etcd/clientv3"
-	"github.com/coreos/etcd/mvcc/mvccpb"
+	"golang.org/x/net/context"
 )
 
 const (
@@ -11,19 +11,22 @@ const (
 )
 
 var (
-	ErrorInvalidRootPath = errors.New("root key should end with / ")
-	ErrorInvalidKey      = errors.New("key should start with root key and not end with / ")
+	ErrorInvalidRootKey = errors.New("root key should end with / ")
+	ErrorPutKey         = errors.New("key is not under a directory or has been set")
 )
 
 type EtcdV3HierarchyClient struct {
-	client   *clientv3.Client
-	rootKey  string
+	client *clientv3.Client
+	ctx    context.Context
+	// root key as root directory
+	rootKey string
+	// special value for directory
 	dirValue string
 }
 
 func New(clt *clientv3.Client, rootKey string, dirValue ...string) (*EtcdV3HierarchyClient, error) {
 	if !checkRootKey(rootKey) {
-		return nil, ErrorInvalidRootPath
+		return nil, ErrorInvalidRootKey
 	}
 
 	d := DEFAULT_DIR_KEY
@@ -35,24 +38,12 @@ func New(clt *clientv3.Client, rootKey string, dirValue ...string) (*EtcdV3Hiera
 		client:   clt,
 		rootKey:  rootKey,
 		dirValue: d,
-	}
+		ctx:      context.TODO(),
+	}, nil
 }
 
+// make sure the rootKey is a directory
 func (clt *EtcdV3HierarchyClient) FormatRootKey() error {
-	return nil
-}
-
-type Node struct {
-	*mvccpb.KeyValue
-	Dir bool
-}
-
-// set kv or directory
-func (clt *EtcdV3HierarchyClient) Set(path string, value string, dir bool) error {
-	return nil
-}
-
-// get value of a key, return (isDir, kvs, error)
-func (clt *EtcdV3HierarchyClient) Get(path string) (bool, []*Node, error) {
-	return false, nil, nil
+	_, err := clt.client.Put(clt.ctx, clt.rootKey, clt.dirValue)
+	return err
 }

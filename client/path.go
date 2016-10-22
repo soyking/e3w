@@ -9,11 +9,9 @@ func checkRootKey(rootKey string) bool {
 	return strings.HasSuffix(rootKey, "/")
 }
 
-func (clt *EtcdV3HierarchyClient) ensureKey(key string) (string, error) {
-	if !strings.HasPrefix(key, clt.rootKey) || strings.HasSuffix(key, "/") {
-		return "", ErrorInvalidKey
-	}
-
+// ensure key, return (realKey, parentKey)
+func (clt *EtcdV3HierarchyClient) ensureKey(key string) (string, string) {
+	key = clt.rootKey + strings.Trim(key, "/")
 	parentKey := path.Clean(key + "/../")
-	return parentKey, nil
+	return key, parentKey
 }
