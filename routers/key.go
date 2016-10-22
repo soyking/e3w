@@ -42,6 +42,6 @@ func putKeyHandler(client *client.EtcdHRCHYClient) respHandler {
 
 func delKeyHandler(client *client.EtcdHRCHYClient) respHandler {
 	return func(c *gin.Context) (interface{}, error) {
-		return nil, nil
+		return nil, client.Delete(c.Param("key"))
 	}
 }
