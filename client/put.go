@@ -27,12 +27,13 @@ func (clt *EtcdV3HierarchyClient) Put(key string, value string, dir bool) error 
 	).Then(
 		clientv3.OpPut(key, value),
 	)
-	resp, err := txn.Commit()
+
+	txnResp, err := txn.Commit()
 	if err != nil {
 		return err
 	}
 
-	if !resp.Succeeded {
+	if !txnResp.Succeeded {
 		return ErrorPutKey
 	}
 
