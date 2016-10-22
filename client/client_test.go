@@ -35,6 +35,7 @@ func init() {
 
 	Suite(&ClientSuite{})
 	Suite(&PutSuite{})
+	Suite(&GetSuite{})
 }
 
 type ClientSuite struct{}

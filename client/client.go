@@ -13,6 +13,7 @@ const (
 var (
 	ErrorInvalidRootKey = errors.New("root key should end with / ")
 	ErrorPutKey         = errors.New("key is not under a directory or has been set")
+	ErrorKeyNotFound    = errors.New("key has not been set")
 )
 
 type EtcdV3HierarchyClient struct {
@@ -46,4 +47,8 @@ func New(clt *clientv3.Client, rootKey string, dirValue ...string) (*EtcdV3Hiera
 func (clt *EtcdV3HierarchyClient) FormatRootKey() error {
 	_, err := clt.client.Put(clt.ctx, clt.rootKey, clt.dirValue)
 	return err
+}
+
+func (clt *EtcdV3HierarchyClient) isDir(value []byte) bool {
+	return string(value) == clt.dirValue
 }
