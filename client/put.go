@@ -2,14 +2,14 @@ package client
 
 import "github.com/coreos/etcd/clientv3"
 
-// set kv or directory
-func (clt *EtcdV3HierarchyClient) Put(key string, value string, dir bool) error {
-	key, parentKey := clt.ensureKey(key)
 
-	// special value for dir
-	if dir {
-		value = clt.dirValue
-	}
+func (clt *EtcdV3HierarchyClient) PutDir(key string) error {
+	return clt.Put(key,clt.dirValue)
+}
+
+// set kv or directory
+func (clt *EtcdV3HierarchyClient) Put(key string, value string) error {
+	key, parentKey := clt.ensureKey(key)
 
 	txn := clt.client.Txn(clt.ctx)
 	// make sure the parentKey is a directory and key has not been set

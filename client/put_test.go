@@ -31,7 +31,7 @@ func (s *PutSuite) TestPut1(c *C) {
 
 	// parentKey is not a directory
 	c.Assert(
-		client.Put(TEST_PUT_KEY+"/def", "", false),
+		client.Put(TEST_PUT_KEY+"/def", ""),
 		Equals,
 		ErrorPutKey,
 	)
@@ -40,7 +40,7 @@ func (s *PutSuite) TestPut1(c *C) {
 func (s *PutSuite) TestPut2(c *C) {
 	// key has been set
 	c.Assert(
-		client.Put(TEST_PUT_KEY, "", false),
+		client.Put(TEST_PUT_KEY, ""),
 		Equals,
 		ErrorPutKey,
 	)
@@ -49,7 +49,7 @@ func (s *PutSuite) TestPut2(c *C) {
 func (s *PutSuite) TestPut3(c *C) {
 	// success
 	c.Assert(
-		client.Put(TEST_PUT_KEY+"/def", "", false),
+		client.Put(TEST_PUT_KEY+"/def", ""),
 		Equals,
 		nil,
 	)
