@@ -13,10 +13,7 @@ func (clt *EtcdHRCHYClient) List(key string) ([]*Node, error) {
 		return nil, err
 	}
 	// directory start with /
-	dir := key
-	if !isRoot(dir) {
-		dir = dir + "/"
-	}
+	dir := key + "/"
 
 	txn := clt.client.Txn(clt.ctx)
 	// make sure the list key is a directory
@@ -52,7 +49,7 @@ func (clt *EtcdHRCHYClient) List(key string) ([]*Node, error) {
 func (clt *EtcdHRCHYClient) list(dir string, kvs []*mvccpb.KeyValue) ([]*Node, error) {
 	nodes := []*Node{}
 	for _, kv := range kvs {
-		name := strings.TrimPrefix(string(kv.Value), dir)
+		name := strings.TrimPrefix(string(kv.Key), dir)
 		if strings.Contains(name, "/") {
 			// secondary directory
 			continue

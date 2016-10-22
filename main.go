@@ -33,6 +33,23 @@ func init() {
 	}
 }
 
+func initClient(config *conf.Config) (*client.EtcdHRCHYClient, error) {
+	clt, err := clientv3.New(clientv3.Config{
+		Endpoints: config.EtcdEndPoints,
+		Username:  config.EtcdUsername,
+		Password:  config.EtcdPassword,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	client, err := client.New(clt, config.EtcdRootKey)
+	if err != nil {
+		return nil, err
+	}
+	return client, client.FormatRootKey()
+}
+
 func main() {
 	config, err := conf.Init(configFilepath)
 	if err != nil {
@@ -47,17 +64,4 @@ func main() {
 	router := gin.Default()
 	routers.InitRouters(router, client)
 	router.Run(":" + config.Port)
-}
-
-func initClient(config *conf.Config) (*client.EtcdHRCHYClient, error) {
-	clt, err := clientv3.New(clientv3.Config{
-		Endpoints: config.EtcdEndPoints,
-		Username:  config.EtcdUsername,
-		Password:  config.EtcdPassword,
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	return client.New(clt, config.EtcdRootKey)
 }
