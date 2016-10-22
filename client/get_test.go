@@ -1,12 +1,12 @@
 package client
 
 import (
-	"github.com/coreos/etcd/clientv3"
 	. "gopkg.in/check.v1"
+	"github.com/coreos/etcd/clientv3"
 )
 
 const (
-	TEST_GET_KEY   = "get_key"
+	TEST_GET_KEY   = "/get_key"
 	TEST_GET_VALUE = "def"
 )
 
@@ -36,7 +36,7 @@ func (s *GetSuite) TestGet1(c *C) {
 }
 
 func (s *GetSuite) TestGet2(c *C) {
-	node, err := client.Get("")
+	node, err := client.Get("/")
 	c.Assert(
 		err,
 		Equals,

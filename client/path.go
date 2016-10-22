@@ -5,13 +5,24 @@ import (
 	"strings"
 )
 
+func isRoot(key string) bool {
+	return key == "/"
+}
+
 func checkRootKey(rootKey string) bool {
-	return strings.HasSuffix(rootKey, "/")
+	return isRoot(rootKey) || !strings.HasSuffix(rootKey, "/")
 }
 
 // ensure key, return (realKey, parentKey)
 func (clt *EtcdHRCHYClient) ensureKey(key string) (string, string) {
-	key = clt.rootKey + strings.Trim(key, "/")
-	parentKey := path.Clean(key + "/../")
-	return key, parentKey
+	if isRoot(key) {
+		return clt.rootKey, clt.rootKey
+	}
+
+	prefix := ""
+	if !isRoot(clt.rootKey) {
+		prefix = clt.rootKey
+	}
+	realKey := prefix + strings.TrimRight(key, "/")
+	return realKey, path.Clean(realKey + "/../")
 }

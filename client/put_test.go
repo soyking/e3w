@@ -5,7 +5,7 @@ import (
 	. "gopkg.in/check.v1"
 )
 
-const TEST_PUT_KEY = "put_dir"
+const TEST_PUT_KEY = "/put_dir"
 
 type PutSuite struct{}
 

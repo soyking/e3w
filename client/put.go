@@ -2,9 +2,8 @@ package client
 
 import "github.com/coreos/etcd/clientv3"
 
-
 func (clt *EtcdHRCHYClient) PutDir(key string) error {
-	return clt.Put(key,clt.dirValue)
+	return clt.Put(key, clt.dirValue)
 }
 
 // set kv or directory

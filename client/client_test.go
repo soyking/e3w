@@ -8,7 +8,7 @@ import (
 
 const (
 	TEST_ETCD_ADDR = "127.0.0.1:2379"
-	TEST_ROOT_KEY  = "e3w_test/"
+	TEST_ROOT_KEY  = "e3w_test"
 )
 
 func Test(t *testing.T) { TestingT(t) }
@@ -24,11 +24,6 @@ func init() {
 	}
 
 	client, err = New(clt, TEST_ROOT_KEY)
-	if err != nil {
-		panic(err)
-	}
-
-	err = client.FormatRootKey()
 	if err != nil {
 		panic(err)
 	}
@@ -49,22 +44,45 @@ func (s *ClientSuite) TestNewClient(c *C) {
 	}
 
 	_, err = New(clt, "abc")
-	c.Assert(err, Equals, ErrorInvalidRootKey)
+	c.Assert(err, Equals, nil)
 
 	_, err = New(clt, "abc/")
-	c.Assert(err, Equals, nil)
+	c.Assert(err, Equals, ErrorInvalidRootKey)
 }
 
 func (s *ClientSuite) TestEnsureKey(c *C) {
-	key, parentKey := client.ensureKey("/abc/def/")
-	c.Assert(
-		key,
-		Equals,
-		TEST_ROOT_KEY+"abc/def",
-	)
-	c.Assert(
-		parentKey,
-		Equals,
-		TEST_ROOT_KEY+"abc",
-	)
+	clt, err := clientv3.New(clientv3.Config{Endpoints: []string{TEST_ETCD_ADDR}})
+	if err != nil {
+		c.Error(err)
+	}
+
+	client, err := New(clt, "abc")
+	c.Assert(err, Equals, nil)
+
+	key, parentKey := client.ensureKey("/")
+	c.Assert(key, Equals, "abc")
+	c.Assert(parentKey, Equals, "abc")
+
+	key, parentKey = client.ensureKey("/def")
+	c.Assert(key, Equals, "abc/def")
+	c.Assert(parentKey, Equals, "abc")
+
+	key, parentKey = client.ensureKey("/def/ghi")
+	c.Assert(key, Equals, "abc/def/ghi")
+	c.Assert(parentKey, Equals, "abc/def")
+
+	client, err = New(clt, "/")
+	c.Assert(err, Equals, nil)
+
+	key, parentKey = client.ensureKey("/")
+	c.Assert(key, Equals, "/")
+	c.Assert(parentKey, Equals, "/")
+
+	key, parentKey = client.ensureKey("/def")
+	c.Assert(key, Equals, "/def")
+	c.Assert(parentKey, Equals, "/")
+
+	key, parentKey = client.ensureKey("/def/ghi")
+	c.Assert(key, Equals, "/def/ghi")
+	c.Assert(parentKey, Equals, "/def")
 }

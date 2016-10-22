@@ -38,23 +38,24 @@ func New(clt *clientv3.Client, rootKey string, dirValue ...string) (*EtcdHRCHYCl
 		d = dirValue[0]
 	}
 
-	return &EtcdHRCHYClient{
+	client := &EtcdHRCHYClient{
 		client:   clt,
 		rootKey:  rootKey,
 		dirValue: d,
 		ctx:      context.TODO(),
-	}, nil
+	}
+	return client, client.formatRootKey()
 }
 
 // make sure the rootKey is a directory
-func (clt *EtcdHRCHYClient) FormatRootKey() error {
+func (clt *EtcdHRCHYClient) formatRootKey() error {
 	_, err := clt.client.Put(clt.ctx, clt.rootKey, clt.dirValue)
 	return err
 }
 
 type Node struct {
 	*mvccpb.KeyValue
-	IsDir bool
+	IsDir bool `json:"is_dir"`
 }
 
 func (clt *EtcdHRCHYClient) isDir(value []byte) bool {

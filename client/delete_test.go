@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	TEST_DELETE_KEY        = "delete_dir"
+	TEST_DELETE_KEY        = "/delete_dir"
 	TEST_DELETE_KEY_SUB    = "key"
 	TEST_DELETE_KEY_SUBDIR = "dir"
 	TEST_DELETE_COUNT      = 3

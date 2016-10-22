@@ -8,8 +8,8 @@ import (
 )
 
 const (
-	TEST_LIST_KEY1  = "list_dir1"
-	TEST_LIST_KEY2  = "list_dir2"
+	TEST_LIST_KEY1  = "/list_dir1"
+	TEST_LIST_KEY2  = "/list_dir2"
 	TEST_LIST_COUNT = 5
 )
 
