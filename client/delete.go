@@ -6,7 +6,10 @@ import (
 
 // list a directory
 func (clt *EtcdHRCHYClient) Delete(key string) error {
-	key, _ = clt.ensureKey(key)
+	key, _, err := clt.ensureKey(key)
+	if err != nil {
+		return err
+	}
 	// directory start with /
 	dir := key + "/"
 
@@ -25,6 +28,6 @@ func (clt *EtcdHRCHYClient) Delete(key string) error {
 		clientv3.OpDelete(key),
 	)
 
-	_, err := txn.Commit()
+	_, err = txn.Commit()
 	return err
 }

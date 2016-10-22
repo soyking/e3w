@@ -8,7 +8,10 @@ func (clt *EtcdHRCHYClient) PutDir(key string) error {
 
 // set kv or directory
 func (clt *EtcdHRCHYClient) Put(key string, value string) error {
-	key, parentKey := clt.ensureKey(key)
+	key, parentKey, err := clt.ensureKey(key)
+	if err != nil {
+		return err
+	}
 
 	txn := clt.client.Txn(clt.ctx)
 	// make sure the parentKey is a directory and key has not been set

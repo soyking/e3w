@@ -2,7 +2,11 @@ package client
 
 // get value of a key
 func (clt *EtcdHRCHYClient) Get(key string) (*Node, error) {
-	key, _ = clt.ensureKey(key)
+	key, _, err := clt.ensureKey(key)
+	if err != nil {
+		return nil, err
+	}
+
 	resp, err := clt.client.Get(clt.ctx, key)
 	if err != nil {
 		return nil, err

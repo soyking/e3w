@@ -12,7 +12,8 @@ const (
 )
 
 var (
-	ErrorInvalidRootKey = errors.New("root key should end with / ")
+	ErrorInvalidRootKey = errors.New("root key should not be empty or end with /")
+	ErrorInvalidKey     = errors.New("key should start with /")
 	ErrorPutKey         = errors.New("key is not under a directory or has been set")
 	ErrorKeyNotFound    = errors.New("key has not been set")
 	ErrorListKey        = errors.New("can only list a directory")
@@ -38,17 +39,16 @@ func New(clt *clientv3.Client, rootKey string, dirValue ...string) (*EtcdHRCHYCl
 		d = dirValue[0]
 	}
 
-	client := &EtcdHRCHYClient{
+	return &EtcdHRCHYClient{
 		client:   clt,
 		rootKey:  rootKey,
 		dirValue: d,
 		ctx:      context.TODO(),
-	}
-	return client, client.formatRootKey()
+	}, nil
 }
 
 // make sure the rootKey is a directory
-func (clt *EtcdHRCHYClient) formatRootKey() error {
+func (clt *EtcdHRCHYClient) FormatRootKey() error {
 	_, err := clt.client.Put(clt.ctx, clt.rootKey, clt.dirValue)
 	return err
 }

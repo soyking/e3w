@@ -8,9 +8,15 @@ import (
 
 // list a directory
 func (clt *EtcdHRCHYClient) List(key string) ([]*Node, error) {
-	key, _ = clt.ensureKey(key)
+	key, _, err := clt.ensureKey(key)
+	if err != nil {
+		return nil, err
+	}
 	// directory start with /
-	dir := key + "/"
+	dir := key
+	if !isRoot(dir) {
+		dir = dir + "/"
+	}
 
 	txn := clt.client.Txn(clt.ctx)
 	// make sure the list key is a directory
