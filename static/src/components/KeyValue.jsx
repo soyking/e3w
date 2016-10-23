@@ -5,10 +5,10 @@ import KeyValueSetting from './KeyValueSetting'
 
 const KeyValue = React.createClass({
     render() {
-        let key = this.props.params.splat || "/"
+        let key = this.props.params.splat
         return (
             <Box>
-                <KeyValueMenu currentKey="abcd" />
+                <KeyValueMenu currentKey={key} />
                 <Item flex><KeyValueSetting /></Item>
             </Box>
         )

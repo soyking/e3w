@@ -4,6 +4,7 @@ import { hashHistory, Router, Route, IndexRedirect } from 'react-router'
 import App from './components/App.jsx'
 import KeyValue from './components/KeyValue.jsx'
 import 'antd/dist/antd.min.css'
+import './css/patch.css'
 
 ReactDOM.render((
     <Router history={hashHistory}>

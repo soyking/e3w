@@ -6,12 +6,12 @@ const App = React.createClass({
     getInitialState() {
         return {
             current: 'kv',
-        };
+        }
     },
     handleClick(e) {
         this.setState({
             current: e.key,
-        });
+        })
         window.location.hash = "#" + e.key
     },
     render() {
