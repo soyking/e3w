@@ -1,9 +1,16 @@
 import React from 'react'
+import { Box, Item } from "react-polymer-layout"
+import KeyValueMenu from './KeyValueMenu'
+import KeyValueSetting from './KeyValueSetting'
 
 const KeyValue = React.createClass({
     render() {
+        let key = this.props.params.splat || "/"
         return (
-            <div>key value</div>
+            <Box>
+                <KeyValueMenu currentKey="abcd" />
+                <Item flex><KeyValueSetting /></Item>
+            </Box>
         )
     }
 })
