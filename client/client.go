@@ -65,7 +65,7 @@ func (clt *EtcdHRCHYClient) isDir(value []byte) bool {
 
 func (clt *EtcdHRCHYClient) createNode(kv *mvccpb.KeyValue) *Node {
 	// remove rootKey prefix
-	kv.Key = []byte(strings.TrimPrefix(string(kv.Key), clt.rootKey+"/"))
+	kv.Key = []byte(strings.TrimPrefix(string(kv.Key), clt.rootKey))
 	return &Node{
 		KeyValue: kv,
 		IsDir:    clt.isDir(kv.Value),
