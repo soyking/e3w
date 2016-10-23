@@ -1,9 +1,29 @@
 package routers
 
 import (
+	"encoding/base64"
 	"github.com/gin-gonic/gin"
 	"github.com/soyking/e3w/client"
 )
+
+type Node struct {
+	Key   string `json:"key"`
+	Value string `json:"value"`
+	IsDir bool   `json:"is_dir"`
+}
+
+func base64Decode(src string) (string, error) {
+	dst, err := base64.StdEncoding.DecodeString(src)
+	return string(dst), err
+}
+
+func parseNode(node *client.Node) *Node {
+	return &Node{
+		Key:   string(node.Key),
+		Value: string(node.Value),
+		IsDir: node.IsDir,
+	}
+}
 
 func getKeyHandler(client *client.EtcdHRCHYClient) respHandler {
 	return func(c *gin.Context) (interface{}, error) {
@@ -11,9 +31,23 @@ func getKeyHandler(client *client.EtcdHRCHYClient) respHandler {
 		key := c.Param("key")
 
 		if list {
-			return client.List(key)
+			nodes, err := client.List(key)
+			if err != nil {
+				return nil, err
+			}
+
+			realNodes := []*Node{}
+			for _, node := range nodes {
+				realNodes = append(realNodes, parseNode(node))
+			}
+			return realNodes, nil
 		} else {
-			return client.Get(key)
+			node, err := client.Get(key)
+			if err != nil {
+				return nil, err
+			}
+
+			return parseNode(node), nil
 		}
 	}
 }

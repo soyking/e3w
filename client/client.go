@@ -5,6 +5,7 @@ import (
 	"github.com/coreos/etcd/clientv3"
 	"github.com/coreos/etcd/mvcc/mvccpb"
 	"golang.org/x/net/context"
+	"strings"
 )
 
 const (
@@ -63,6 +64,8 @@ func (clt *EtcdHRCHYClient) isDir(value []byte) bool {
 }
 
 func (clt *EtcdHRCHYClient) createNode(kv *mvccpb.KeyValue) *Node {
+	// remove rootKey prefix
+	kv.Key = []byte(strings.TrimPrefix(string(kv.Key), clt.rootKey+"/"))
 	return &Node{
 		KeyValue: kv,
 		IsDir:    clt.isDir(kv.Value),
