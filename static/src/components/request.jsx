@@ -1,8 +1,8 @@
 import xhr from 'xhr'
 import { message } from 'antd';
 
-function get(path, callback) {
-    xhr.get(path, function (err, response) {
+function handler(callback) {
+    return function (err, response) {
         if (err) {
             message.error(err);
         } else {
@@ -15,11 +15,16 @@ function get(path, callback) {
                 }
             }
         }
-    })
+    }
 }
 
 function KVList(path, callback) {
-    get("kv/" + path + "?list", callback)
+    xhr.get("kv" + path + "?list", handler(callback))
 }
 
-module.exports = { KVList }
+function KVPut(path, value, callback) {
+    let bodyStr = JSON.stringify({ value: value })
+    xhr.put("kv" + path, { body: bodyStr }, handler(callback))
+}
+
+module.exports = { KVList, KVPut }

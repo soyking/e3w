@@ -1,8 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { hashHistory, Router, Route, IndexRedirect } from 'react-router'
-import App from './components/App.jsx'
-import KeyValue from './components/KeyValue.jsx'
+import App from './components/App'
+import KeyValue from './components/KeyValue'
 import 'antd/dist/antd.min.css'
 import './css/patch.css'
 
