@@ -1,5 +1,5 @@
 import xhr from 'xhr'
-import { message } from 'antd';
+import { message } from 'antd'
 
 function handler(callback) {
     return function (err, response) {
@@ -31,4 +31,8 @@ function KVDelete(path, callback) {
     xhr.del("kv" + path, null, handler(callback))
 }
 
-module.exports = { KVList, KVPut, KVDelete }
+function KVGet(path, callback) {
+    xhr.get("kv" + path, handler(callback))
+}
+
+module.exports = { KVList, KVPut, KVDelete, KVGet }

@@ -8,7 +8,7 @@ const KeyValueItem = React.createClass({
         if (info.is_dir) {
             this.props.enter(info.key)
         } else {
-            // TODO: fetch value and show
+            this.props.set(info.key)
         }
     },
 

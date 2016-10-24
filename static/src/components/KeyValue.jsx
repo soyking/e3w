@@ -4,6 +4,7 @@ import { Breadcrumb } from 'antd'
 import { KVList } from './request'
 import KeyValueCreate from './KeyValueCreate'
 import KeyValueItem from './KeyValueItem'
+import KeyValueSetting from './KeyValueSetting'
 
 const KeyValue = React.createClass({
     // states:
@@ -41,6 +42,7 @@ const KeyValue = React.createClass({
 
     _fetch(dir) {
         this.setState(this._parseKey(dir))
+        this.setState({ setting: false })
     },
 
     _changeMenu(dir) {
@@ -48,10 +50,18 @@ const KeyValue = React.createClass({
         this._fetch(dir)
     },
 
+    _fullKey(subKey) {
+        return (this._isRoot() ? "/" : this.state.dir + "/") + subKey
+    },
+
     _enter(subKey) {
-        let dir = (this._isRoot() ? "/" : this.state.dir + "/") + subKey
+        let dir = this._fullKey(subKey)
         window.location.hash = "#kv" + dir
         this._fetch(dir)
+    },
+
+    _set(subKey) {
+        this.setState({ setting: true, currentKey: this._fullKey(subKey) })
     },
 
     _update() {
@@ -70,12 +80,13 @@ const KeyValue = React.createClass({
     },
 
     getInitialState() {
-        return { dir: "", menus: [], list: [] }
+        return { dir: "", menus: [], list: [], setting: false, currentKey: "" }
     },
 
     render() {
+        let currentKey = this.state.currentKey
         return (
-            <Box>
+            <Box >
                 <Box vertical style={{ minWidth: 400 }}>
                     <Breadcrumb>
                         {
@@ -87,13 +98,16 @@ const KeyValue = React.createClass({
                     <Box vertical>
                         {
                             this.state.list.map(
-                                l => (<KeyValueItem key={l.key} enter={this._enter} info={l} />)
+                                l => (<KeyValueItem key={l.key} enter={this._enter} set={this._set} info={l} />)
                             )
                         }
                     </Box>
                 </Box>
-                <KeyValueCreate update={this._update} back={this._back} dir={this.state.dir} />
-            </Box>
+                {this.state.setting ?
+                    (<KeyValueSetting currentKey={currentKey} />) :
+                    (<KeyValueCreate update={this._update} back={this._back} dir={this.state.dir} fullKey={this._fullKey} />)}
+
+            </Box >
         )
     }
 })

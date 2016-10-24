@@ -10,11 +10,11 @@ const KeyValueCreate = React.createClass({
     },
 
     _createKey(e) {
-        KVPut(this.state.dir + "/" + this.state.key, this.state.value, this._createDone)
+        KVPut(this.props.fullKey(this.state.key), this.state.value, this._createDone)
     },
 
     _createDir(e) {
-        KVPut(this.state.dir + "/" + this.state.key + "?dir", null, this._createDone)
+        KVPut(this.props.fullKey(this.state.key) + "?dir", null, this._createDone)
     },
 
     _deleteDone(result) {
@@ -29,16 +29,16 @@ const KeyValueCreate = React.createClass({
         return { dir: "", key: "", value: "" }
     },
 
-    _updateDir() {
-        this.setState({ dir: this.props.dir })
+    _updateDir(props) {
+        this.setState({ dir: props.dir })
     },
 
-    componetDidMount() {
-        this._updateDir()
+    componentDidMount() {
+        this._updateDir(this.props)
     },
 
-    componentWillReceiveProps() {
-        this._updateDir()
+    componentWillReceiveProps(nextProps) {
+        this._updateDir(nextProps)
     },
 
     render() {
