@@ -14,17 +14,12 @@ func (clt *EtcdHRCHYClient) Put(key string, value string) error {
 	}
 
 	txn := clt.client.Txn(clt.ctx)
-	// make sure the parentKey is a directory and key has not been set
+	// make sure the parentKey is a directory
 	txn.If(
 		clientv3.Compare(
 			clientv3.Value(parentKey),
 			"=",
 			clt.dirValue,
-		),
-		clientv3.Compare(
-			clientv3.Version(key), // version = 0 if key has not been set
-			"=",
-			0,
 		),
 	).Then(
 		clientv3.OpPut(key, value),
