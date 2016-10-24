@@ -7,14 +7,18 @@ import KeyValueItem from './KeyValueItem'
 
 const KeyValue = React.createClass({
     // states:
-    // - dir: the full path of current dir, show on the top
+    // - dir: the full path of current dir, eg. / or /abc/def
     // - menus: components of Breadcrumb, including path (to another dir, using in url hash) and name
     // - list: the key under the dir, get from api
 
+    _isRoot() {
+        return this.state.dir === "/"
+    },
+
     _parseList(list) {
         list = list || []
-        // trim prefix of dir, get the relative path
-        let prefixLen = this.state.dir.length
+        // trim prefix of dir, get the relative path, +1 for /
+        let prefixLen = this.state.dir.length + (this._isRoot() ? 0 : 1)
         list.forEach(l => {
             l.key = l.key.slice(prefixLen)
         })
@@ -30,7 +34,6 @@ const KeyValue = React.createClass({
                 // get the full path of every component
                 menus.push({ path: keys.slice(0, i + 1).join("/"), name: keys[i] })
             }
-            if (!dir.endsWith("/")) { dir = dir + "/" }
         }
         KVList(dir, this._parseList)
         return { dir: dir, menus: menus }
@@ -46,13 +49,20 @@ const KeyValue = React.createClass({
     },
 
     _enter(subKey) {
-        let dir = this.state.dir + subKey
+        let dir = (this._isRoot() ? "/" : this.state.dir + "/") + subKey
         window.location.hash = "#kv" + dir
         this._fetch(dir)
     },
 
     _update() {
         this._fetch(this.state.dir)
+    },
+
+    _back() {
+        // back to previous dir
+        let menus = this.state.menus
+        let targetPath = (menus[menus.length - 2] || menus[0]).path
+        this._changeMenu(targetPath)
     },
 
     componentDidMount() {
@@ -65,12 +75,12 @@ const KeyValue = React.createClass({
 
     render() {
         return (
-            <Box style={{ padding: 20 }}>
+            <Box>
                 <Box vertical style={{ minWidth: 400 }}>
                     <Breadcrumb>
                         {
                             this.state.menus.map(
-                                m => (<Breadcrumb.Item key={m.path} onClick={() => this._changeMenu(m.path) }><a>{m.name}</a></Breadcrumb.Item>)
+                                m => (<Breadcrumb.Item key={m.path} onClick={() => this._changeMenu(m.path)}><a>{m.name}</a></Breadcrumb.Item>)
                             )
                         }
                     </Breadcrumb>
@@ -82,7 +92,7 @@ const KeyValue = React.createClass({
                         }
                     </Box>
                 </Box>
-                <KeyValueCreate update={this._update} dir={this.state.dir}/>
+                <KeyValueCreate update={this._update} back={this._back} dir={this.state.dir} />
             </Box>
         )
     }

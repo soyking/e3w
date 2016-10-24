@@ -27,4 +27,8 @@ function KVPut(path, value, callback) {
     xhr.put("kv" + path, { body: bodyStr }, handler(callback))
 }
 
-module.exports = { KVList, KVPut }
+function KVDelete(path, callback) {
+    xhr.del("kv" + path, null, handler(callback))
+}
+
+module.exports = { KVList, KVPut, KVDelete }
