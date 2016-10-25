@@ -3,7 +3,7 @@ package routers
 import (
 	"encoding/base64"
 	"github.com/gin-gonic/gin"
-	"github.com/soyking/e3w/client"
+	"github.com/soyking/e3ch"
 )
 
 type Node struct {
@@ -52,25 +52,37 @@ func getKeyHandler(client *client.EtcdHRCHYClient) respHandler {
 	}
 }
 
-type putRequest struct {
+type postRequest struct {
 	Value string `json:"value"`
 }
 
-func putKeyHandler(client *client.EtcdHRCHYClient) respHandler {
+func postKeyHandler(client *client.EtcdHRCHYClient) respHandler {
 	return func(c *gin.Context) (interface{}, error) {
 		_, dir := c.GetQuery("dir")
 		key := c.Param("key")
 
 		if dir {
-			return nil, client.PutDir(key)
+			return nil, client.CreateDir(key)
 		} else {
-			r := new(putRequest)
+			r := new(postRequest)
 			err := parseBody(c, r)
 			if err != nil {
 				return nil, err
 			}
-			return nil, client.Put(key, r.Value)
+			return nil, client.Create(key, r.Value)
 		}
+	}
+}
+
+func putKeyHandler(client *client.EtcdHRCHYClient) respHandler {
+	return func(c *gin.Context) (interface{}, error) {
+		key := c.Param("key")
+		r := new(postRequest)
+		err := parseBody(c, r)
+		if err != nil {
+			return nil, err
+		}
+		return nil, client.Put(key, r.Value)
 	}
 }
 
