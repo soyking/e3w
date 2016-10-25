@@ -15,15 +15,14 @@ const KeyValueItem = React.createClass({
     render() {
         let info = this.props.info
         let icon = info.is_dir ? <Icon type="folder" /> : (<Icon type="file" />)
-        let itemStyle = {
-            borderStyle: "solid", borderWidth: 2,
-            height: 40, margin: "4px 10px 4px 0px", fontSize: 15, fontWeight: 700
-        }
-        itemStyle.borderColor = info.selected ? "#2db7f5" : "#ddd"
+        let bColor = info.selected ? "#2db7f5" : "#ddd"
         return (
-            <Box center style={itemStyle} onClick={this._enter}>
+            <Box center style={{
+                borderStyle: "solid", borderWidth: 2, borderColor: bColor,
+                height: 40, margin: "4px 10px 4px 0px", fontSize: 15, fontWeight: 700
+            }} onClick={this._enter}>
                 <Box center centerJustified style={{
-                    backgroundColor: itemStyle.borderColor,
+                    backgroundColor: bColor,
                     height: "100%",
                     width: 30,
                 }}>{icon}</Box>

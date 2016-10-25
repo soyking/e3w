@@ -29,7 +29,7 @@ const KeyValue = React.createClass({
     },
 
     // dir should be / for /abc/def
-    _parseKey(dir) {
+    _ParseDir(dir) {
         let menus = [{ path: "/", name: "root" }]
         if (dir !== "/") {
             let keys = dir.split("/")
@@ -42,12 +42,14 @@ const KeyValue = React.createClass({
         return { dir: dir, menus: menus }
     },
 
+    // list current dir and using KeyValueSetting
     _fetch(dir) {
-        this.setState(this._parseKey(dir))
+        this.setState(this._ParseDir(dir))
         this.setState({ setting: false })
     },
 
-    _changeMenu(dir) {
+    // change url and fetch
+    _redirect(dir) {
         window.location.hash = "#kv" + dir
         this._fetch(dir)
     },
@@ -56,12 +58,12 @@ const KeyValue = React.createClass({
         return (this._isRoot() ? "/" : this.state.dir + "/") + subKey
     },
 
+    // callback for clicking KeyValueItem to enter a new dir
     _enter(subKey) {
-        let dir = this._fullKey(subKey)
-        window.location.hash = "#kv" + dir
-        this._fetch(dir)
+        this._redirect(this._fullKey(subKey))
     },
 
+    // callback for clicking KeyValueItem to set the kv
     _set(subKey) {
         let list = this.state.list
         list.forEach(l => {
@@ -70,19 +72,21 @@ const KeyValue = React.createClass({
         this.setState({ setting: true, currentKey: this._fullKey(subKey), list: list })
     },
 
+    // callback for deleting a key in KeyValueItem
     _delete() {
         this._fetch(this.state.dir)
     },
 
+    // callback for creating kv or dir
     _update() {
         this._fetch(this.state.dir)
     },
 
+    // callback for delete currentDir and enter previous dir
     _back() {
-        // back to previous dir
         let menus = this.state.menus
         let targetPath = (menus[menus.length - 2] || menus[0]).path
-        this._changeMenu(targetPath)
+        this._redirect(targetPath)
     },
 
     componentDidMount() {
@@ -101,7 +105,7 @@ const KeyValue = React.createClass({
                     <Breadcrumb>
                         {
                             this.state.menus.map(
-                                m => (<Breadcrumb.Item key={m.path} onClick={() => this._changeMenu(m.path)}><a>{m.name}</a></Breadcrumb.Item>)
+                                m => (<Breadcrumb.Item key={m.path} onClick={() => this._redirect(m.path)}><a>{m.name}</a></Breadcrumb.Item>)
                             )
                         }
                     </Breadcrumb>

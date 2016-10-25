@@ -30,7 +30,7 @@ const KeyValueCreate = React.createClass({
     },
 
     _updateDir(props) {
-        this.setState({ dir: props.dir })
+        this.setState({ dir: props.dir, key: "", value: "" })
     },
 
     componentDidMount() {
