@@ -22,6 +22,15 @@ function KVList(path, callback) {
     xhr.get("kv" + path + "?list", handler(callback))
 }
 
+function KVGet(path, callback) {
+    xhr.get("kv" + path, handler(callback))
+}
+
+function KVPost(path, value, callback) {
+    let bodyStr = JSON.stringify({ value: value })
+    xhr.post("kv" + path, { body: bodyStr }, handler(callback))
+}
+
 function KVPut(path, value, callback) {
     let bodyStr = JSON.stringify({ value: value })
     xhr.put("kv" + path, { body: bodyStr }, handler(callback))
@@ -31,8 +40,5 @@ function KVDelete(path, callback) {
     xhr.del("kv" + path, null, handler(callback))
 }
 
-function KVGet(path, callback) {
-    xhr.get("kv" + path, handler(callback))
-}
 
-module.exports = { KVList, KVPut, KVDelete, KVGet }
+module.exports = { KVList, KVPut, KVDelete, KVGet, KVPost }

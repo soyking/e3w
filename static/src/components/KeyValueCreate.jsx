@@ -1,7 +1,7 @@
 import React from 'react'
 import { Input, Button } from 'antd'
 import { Box } from 'react-polymer-layout'
-import { KVPut, KVDelete } from './request'
+import { KVPost, KVDelete } from './request'
 
 const KeyValueCreate = React.createClass({
     _createDone(result) {
@@ -10,11 +10,11 @@ const KeyValueCreate = React.createClass({
     },
 
     _createKey(e) {
-        KVPut(this.props.fullKey(this.state.key), this.state.value, this._createDone)
+        KVPost(this.props.fullKey(this.state.key), this.state.value, this._createDone)
     },
 
     _createDir(e) {
-        KVPut(this.props.fullKey(this.state.key) + "?dir", null, this._createDone)
+        KVPost(this.props.fullKey(this.state.key) + "?dir", null, this._createDone)
     },
 
     _deleteDone(result) {
