@@ -21,13 +21,13 @@ const KeyValueSetting = React.createClass({
         KVPut(this.props.currentKey, this.state.value, this._updateDone)
     },
 
-    // _deleteDone(result) {
-    //     this.props.back()
-    // },
+    _deleteDone(result) {
+        this.props.delete()
+    },
 
-    // _deleteDir() {
-    //     KVDelete(this.state.dir, this._deleteDone)
-    // },
+    _delete() {
+        KVDelete(this.props.currentKey, this._deleteDone)
+    },
 
     getInitialState() {
         return { value: "" }
@@ -43,7 +43,9 @@ const KeyValueSetting = React.createClass({
     },
 
     componentWillReceiveProps(nextProps) {
-        this._fetch(nextProps.currentKey)
+        if (this.props.currentKey !== nextProps.currentKey) {
+            this._fetch(nextProps.currentKey)
+        }
     },
 
     render() {
@@ -54,7 +56,7 @@ const KeyValueSetting = React.createClass({
                 <Box>
                     <Button type="primary" onClick={this._update} >Update</Button>
                     {
-                        <Button type="ghost" onClick={this._deleteDir} >Delete Dir</Button>
+                        <Button type="ghost" onClick={this._delete} >Delete</Button>
                     }
                 </Box>
             </Box>

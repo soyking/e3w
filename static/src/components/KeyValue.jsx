@@ -68,6 +68,10 @@ const KeyValue = React.createClass({
         this.setState({ setting: true, currentKey: this._fullKey(subKey), list: list })
     },
 
+    _delete() {
+        this._fetch(this.state.dir)
+    },
+
     _update() {
         this._fetch(this.state.dir)
     },
@@ -108,7 +112,7 @@ const KeyValue = React.createClass({
                     </Box>
                 </Box>
                 {this.state.setting ?
-                    (<KeyValueSetting currentKey={currentKey} />) :
+                    (<KeyValueSetting currentKey={currentKey} delete={this._delete} />) :
                     (<KeyValueCreate update={this._update} back={this._back} dir={this.state.dir} fullKey={this._fullKey} />)}
 
             </Box >
