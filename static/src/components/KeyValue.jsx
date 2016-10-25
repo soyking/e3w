@@ -61,7 +61,11 @@ const KeyValue = React.createClass({
     },
 
     _set(subKey) {
-        this.setState({ setting: true, currentKey: this._fullKey(subKey) })
+        let list = this.state.list
+        list.forEach(l => {
+            if (l.key === subKey) { l.selected = true } else { l.selected = false }
+        })
+        this.setState({ setting: true, currentKey: this._fullKey(subKey), list: list })
     },
 
     _update() {
