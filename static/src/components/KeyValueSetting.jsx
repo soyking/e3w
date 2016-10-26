@@ -49,15 +49,23 @@ const KeyValueSetting = React.createClass({
     },
 
     render() {
+        let mainColor = "#8ddafd"
         return (
-            <Box vertical>
-                {this.props.currentKey}
-                <Input type="textarea" rows={4} value={this.state.value} onChange={e => this.setState({ value: e.target.value })} />
-                <Box>
-                    <Button type="primary" onClick={this._update} >Update</Button>
-                    {
-                        <Button type="ghost" onClick={this._delete} >Delete</Button>
-                    }
+            <Box vertical className="kv-editor" style={{ borderColor: mainColor }}>
+                <div style={{ height: 20, backgroundColor: mainColor }}></div>
+                <Box center style={{ height: 50, fontSize: 20, fontWeight: 500, borderBottom: "1px solid #ddd", paddingLeft: 5 }}>
+                    {this.props.currentKey}
+                </Box>
+                <Box vertical style={{ padding: "10px 7px 0px 7px" }}>
+                    <div style={{ width: "100%", paddingTop: 10 }}>
+                        <Input type="textarea" rows={4} value={this.state.value} onChange={e => this.setState({ value: e.target.value })} />
+                    </div>
+                    <Box>
+                        <Button type="primary" onClick={this._update} >Update</Button>
+                        {
+                            <Button type="ghost" onClick={this._delete} >Delete</Button>
+                        }
+                    </Box>
                 </Box>
             </Box>
         )

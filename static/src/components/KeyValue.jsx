@@ -71,6 +71,15 @@ const KeyValue = React.createClass({
         this.setState({ setting: true, currentKey: this._fullKey(subKey), list: list })
     },
 
+    // call back for clicking KeyValueItem again
+    _unset(subKey) {
+        let list = this.state.list
+        list.forEach(l => {
+            l.selected = false
+        })
+        this.setState({ setting: false, list: list })
+    },
+
     // callback for deleting a key in KeyValueItem
     _delete() {
         this._fetch(this.state.dir)
@@ -125,12 +134,12 @@ const KeyValue = React.createClass({
                         <Box vertical>
                             {
                                 this.state.list.map(
-                                    l => (<KeyValueItem key={l.key} enter={this._enter} set={this._set} info={l} />)
+                                    l => (<KeyValueItem key={l.key} enter={this._enter} set={this._set} unset={this._unset} info={l} />)
                                 )
                             }
                         </Box>
                     </Box>
-                    <Box start style={{ paddingLeft: 20, borderLeft: "1px #E6E6E6 solid" }}>
+                    <Box start flex style={{ paddingLeft: 20, borderLeft: "1px #E6E6E6 solid" }}>
                         {this.state.setting ?
                             (<KeyValueSetting currentKey={currentKey} delete={this._delete} />) :
                             (<KeyValueCreate update={this._update} back={this._back} dir={this.state.dir} fullKey={this._fullKey} />)}

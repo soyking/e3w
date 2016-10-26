@@ -47,7 +47,7 @@ const KeyValueCreate = React.createClass({
     render() {
         let cantClick = this.state.key === ""
         return (
-            <Box vertical className="kv-editor" style={{ borderTop: "20px solid #ddd" }}>
+            <Box vertical className="kv-editor" style={{ borderTop: "20px solid #ddd", width: "100%" }}>
                 <Box center style={{ height: 50, fontSize: 20, fontWeight: 500, borderBottom: "1px solid #ddd", paddingLeft: 5 }}>
                     Create Key
                 </Box>

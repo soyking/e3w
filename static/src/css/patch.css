@@ -4,14 +4,15 @@
 }
 
 .ant-btn-ghost:focus, .ant-btn-ghost:hover{
-    color:red;
-    border-color:red;
+    color: red;
+    border-color: red;
 }
 
 .kv-editor{
     border: 2px solid;
     border-color: #ddd;
-    border-radius:4px;
+    border-radius: 4px;
+    width: 100%;
 }
 
 .kv-create-button{
