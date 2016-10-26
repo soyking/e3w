@@ -17,11 +17,11 @@ const KeyValueItem = React.createClass({
     render() {
         let info = this.props.info
         let icon = info.is_dir ? <Icon type="folder" /> : (<Icon type="file" />)
-        let bColor = info.selected ? "#5bccff" : "#ddd"
+        let bColor = info.selected ? "#5bccff" : info.is_dir ? "#c3c3c3" : "#ddd"
         return (
             <Box center style={{
                 borderStyle: "solid", borderWidth: 2, borderColor: bColor, borderRadius: 4,
-                height: 40, margin: "0px 10px 8px 0px", fontSize: 15, fontWeight: 700
+                height: 40, margin: "0px 10px 8px 0px", fontSize: 15, fontWeight: 700, cursor: "pointer",
             }} onClick={this._enter}>
                 <Box center centerJustified style={{
                     backgroundColor: bColor,
