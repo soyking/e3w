@@ -18,7 +18,7 @@ const App = React.createClass({
         return (
             <Box centerJustified>
                 <Box vertical style={{ width: 1000 }}>
-                    <Box style={{ padding: 20 }}>
+                    <Box style={{ padding: 20, borderBottom: "1px #E6E6E6 solid" }}>
                         <Menu onClick={this.handleClick}
                             selectedKeys={[this.state.current]}
                             mode="horizontal"
@@ -28,7 +28,6 @@ const App = React.createClass({
                             </Menu.Item>
                         </Menu>
                     </Box>
-                    <hr style={{ color: "" }} />
                     <div style={{ paddingTop: 20 }}>
                         {this.props.children}
                     </div>

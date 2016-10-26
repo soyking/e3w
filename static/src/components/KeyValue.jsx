@@ -48,10 +48,9 @@ const KeyValue = React.createClass({
         this.setState({ setting: false })
     },
 
-    // change url and fetch
+    // change url
     _redirect(dir) {
         window.location.hash = "#kv" + dir
-        this._fetch(dir)
     },
 
     _fullKey(subKey) {
@@ -89,18 +88,20 @@ const KeyValue = React.createClass({
         this._redirect(targetPath)
     },
 
-    _root(props) {
+    // refresh the page with new path in url
+    _refresh(props) {
         this._fetch("/" + (props.params.splat || ""))
     },
 
     componentDidMount() {
-        this._root(this.props)
+        this._refresh(this.props)
     },
 
     componentWillReceiveProps(nextProps) {
-        this._root(nextProps)
+        if (this.props.params.splat !== nextProps.params.splat) {
+            this._refresh(nextProps)
+        }
     },
-
 
     getInitialState() {
         return { dir: "", menus: [], list: [], setting: false, currentKey: "" }
@@ -109,8 +110,8 @@ const KeyValue = React.createClass({
     render() {
         let currentKey = this.state.currentKey
         return (
-            <Box >
-                <Box vertical style={{ minWidth: 400 }}>
+            <Box vertical>
+                <Box style={{ paddingBottom: 15 }}>
                     <Breadcrumb>
                         {
                             this.state.menus.map(
@@ -118,18 +119,24 @@ const KeyValue = React.createClass({
                             )
                         }
                     </Breadcrumb>
-                    <Box vertical>
-                        {
-                            this.state.list.map(
-                                l => (<KeyValueItem key={l.key} enter={this._enter} set={this._set} info={l} />)
-                            )
-                        }
+                </Box>
+                <Box>
+                    <Box vertical style={{ minWidth: 400, paddingRight: 20 }}>
+                        <Box vertical>
+                            {
+                                this.state.list.map(
+                                    l => (<KeyValueItem key={l.key} enter={this._enter} set={this._set} info={l} />)
+                                )
+                            }
+                        </Box>
+                    </Box>
+                    <Box start style={{ paddingLeft: 20, borderLeft: "1px #E6E6E6 solid" }}>
+                        {this.state.setting ?
+                            (<KeyValueSetting currentKey={currentKey} delete={this._delete} />) :
+                            (<KeyValueCreate update={this._update} back={this._back} dir={this.state.dir} fullKey={this._fullKey} />)}
+
                     </Box>
                 </Box>
-                {this.state.setting ?
-                    (<KeyValueSetting currentKey={currentKey} delete={this._delete} />) :
-                    (<KeyValueCreate update={this._update} back={this._back} dir={this.state.dir} fullKey={this._fullKey} />)}
-
             </Box >
         )
     }

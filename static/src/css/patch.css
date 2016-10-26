@@ -2,3 +2,18 @@
     color: #939393;
     font-size: 18px;
 }
+
+.ant-btn-ghost:focus, .ant-btn-ghost:hover{
+    color:red;
+    border-color:red;
+}
+
+.kv-editor{
+    border: 2px solid;
+    border-color: #ddd;
+    border-radius:4px;
+}
+
+.kv-create-button{
+    padding: 15px 15px 12px 0px;
+}

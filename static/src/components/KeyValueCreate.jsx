@@ -2,6 +2,7 @@ import React from 'react'
 import { Input, Button } from 'antd'
 import { Box } from 'react-polymer-layout'
 import { KVPost, KVDelete } from './request'
+import { DeleteButton } from './utils'
 
 const KeyValueCreate = React.createClass({
     _createDone(result) {
@@ -38,38 +39,37 @@ const KeyValueCreate = React.createClass({
     },
 
     componentWillReceiveProps(nextProps) {
-        this._updateDir(nextProps)
+        if (this.props.dir !== nextProps.dir) {
+            this._updateDir(nextProps)
+        }
     },
 
     render() {
-        let canClick = this.state.key !== ""
+        let cantClick = this.state.key === ""
         return (
-            <Box vertical>
-                <Box>
-                    Key: <Input addonBefore={this.state.dir} placeholder="dir / key name" value={this.state.key} onChange={e => this.setState({ key: e.target.value })} />
+            <Box vertical className="kv-editor" style={{ borderTop: "20px solid #ddd" }}>
+                <Box center style={{ height: 50, fontSize: 20, fontWeight: 500, borderBottom: "1px solid #ddd", paddingLeft: 5 }}>
+                    Create Key
                 </Box>
-                <Box>
-                    Value: <Input type="textarea" rows={4} value={this.state.value} onChange={e => this.setState({ value: e.target.value })} />
-                </Box>
-                <Box>
-                    {
-                        canClick ?
-                            (
-                                <div>
-                                    <Button type="primary" onClick={this._createKey} >Create Key</Button>
-                                    <Button type="primary" onClick={this._createDir} >Create Dir</Button>
-                                </div>
-                            ) :
-                            (
-                                <div>
-                                    <Button type="primary" onClick={this._createKey} disabled >Create Key</Button>
-                                    <Button type="primary" onClick={this._createDir} disabled>Create Dir</Button>
-                                </div>
-                            )
-                    }
-                    {
-                        this.state.dir === "/" ? null : (<Button type="ghost" onClick={this._deleteDir} >Delete Dir</Button>)
-                    }
+                <Box vertical style={{ padding: "10px 7px 0px 7px" }}>
+                    <Box style={{ height: 40 }} >
+                        <Input size="large" addonBefore={this.state.dir} placeholder="dir / key name" value={this.state.key} onChange={e => this.setState({ key: e.target.value })} />
+                    </Box>
+                    <div style={{ width: "100%", paddingTop: 10 }}>
+                        <Input type="textarea" rows={4} value={this.state.value} onChange={e => this.setState({ value: e.target.value })} />
+                    </div>
+                    <Box justified >
+                        {
+                            <Box>
+                                <div className="kv-create-button" ><Button type="primary" size="large" onClick={this._createKey} disabled={cantClick} > CREATE KEY</Button></div>
+                                <div className="kv-create-button" ><Button type="primary" size="large" onClick={this._createDir} disabled={cantClick}>CREATE DIR</Button></div>
+                            </Box>
+                        }
+                        {
+                            this.state.dir === "/" ? null :
+                                (<div className="kv-create-button" style={{ paddingRight: 0 }}><DeleteButton name="DELETE DIR" delete={this._deleteDir} /></div>)
+                        }
+                    </Box>
                 </Box>
             </Box>
         )
