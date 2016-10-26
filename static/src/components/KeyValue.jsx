@@ -89,9 +89,18 @@ const KeyValue = React.createClass({
         this._redirect(targetPath)
     },
 
-    componentDidMount() {
-        this._fetch("/" + (this.props.params.splat || ""))
+    _root(props) {
+        this._fetch("/" + (props.params.splat || ""))
     },
+
+    componentDidMount() {
+        this._root(this.props)
+    },
+
+    componentWillReceiveProps(nextProps) {
+        this._root(nextProps)
+    },
+
 
     getInitialState() {
         return { dir: "", menus: [], list: [], setting: false, currentKey: "" }
