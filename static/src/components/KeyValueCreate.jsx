@@ -49,7 +49,7 @@ const KeyValueCreate = React.createClass({
         return (
             <Box vertical className="kv-editor" style={{ borderColor: "#ddd", width: "100%" }}>
                 <div style={{ height: 20, backgroundColor: "#ddd" }}></div>
-                <Box center style={{ height: 50, fontSize: 20, fontWeight: 500, borderBottom: "1px solid #ddd", paddingLeft: 5 }}>
+                <Box center style={{ height: 50, fontSize: 20, fontWeight: 500, borderBottom: "1px solid #ddd", paddingLeft: 10 }}>
                     Create Key
                 </Box>
                 <Box vertical style={{ padding: "10px 7px 0px 7px" }}>
