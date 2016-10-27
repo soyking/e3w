@@ -26,7 +26,7 @@ const KeyValueItem = React.createClass({
                 <Box center centerJustified style={{
                     backgroundColor: bColor,
                     height: "100%",
-                    width: 30,
+                    width: 30
                 }}>{icon}</Box>
                 <Box style={{ paddingLeft: 5 }}>{info.key}</Box>
             </Box>
