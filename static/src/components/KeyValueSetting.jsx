@@ -1,8 +1,9 @@
 import React from 'react'
 import { Input, Button } from 'antd'
 import { Box } from 'react-polymer-layout'
-import { KVGet, KVPut, KVDelete } from './request'
 import { message } from 'antd'
+import { KVGet, KVPut, KVDelete } from './request'
+import { DeleteButton } from './utils'
 
 const KeyValueSetting = React.createClass({
     _getDone(result) {
@@ -49,7 +50,7 @@ const KeyValueSetting = React.createClass({
     },
 
     render() {
-        let mainColor = "#8ddafd"
+        let mainColor = "#cce4f6"
         return (
             <Box vertical className="kv-editor" style={{ borderColor: mainColor }}>
                 <div style={{ height: 20, backgroundColor: mainColor }}></div>
@@ -60,14 +61,14 @@ const KeyValueSetting = React.createClass({
                     <div style={{ width: "100%", paddingTop: 10 }}>
                         <Input type="textarea" rows={4} value={this.state.value} onChange={e => this.setState({ value: e.target.value })} />
                     </div>
-                    <Box>
-                        <Button type="primary" onClick={this._update} >Update</Button>
-                        {
-                            <Button type="ghost" onClick={this._delete} >Delete</Button>
-                        }
+                    <Box justified>
+                        <div className="kv-create-button" ><Button size="large" type="primary" onClick={this._update} >Update</Button></div>
+                        <div className="kv-create-button" style={{ paddingRight: 0 }}>
+                            <DeleteButton name="DELETE KEY" delete={this._delete} />
+                        </div>
                     </Box>
-                </Box>
-            </Box>
+                </Box >
+            </Box >
         )
     }
 })

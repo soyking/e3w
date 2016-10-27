@@ -10,7 +10,6 @@
 
 .kv-editor{
     border: 2px solid;
-    border-color: #ddd;
     border-radius: 4px;
     width: 100%;
 }

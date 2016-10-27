@@ -47,12 +47,13 @@ const KeyValueCreate = React.createClass({
     render() {
         let cantClick = this.state.key === ""
         return (
-            <Box vertical className="kv-editor" style={{ borderTop: "20px solid #ddd", width: "100%" }}>
+            <Box vertical className="kv-editor" style={{ borderColor: "#ddd", width: "100%" }}>
+                <div style={{ height: 20, backgroundColor: "#ddd" }}></div>
                 <Box center style={{ height: 50, fontSize: 20, fontWeight: 500, borderBottom: "1px solid #ddd", paddingLeft: 5 }}>
                     Create Key
                 </Box>
                 <Box vertical style={{ padding: "10px 7px 0px 7px" }}>
-                    <Box style={{ height: 40 }} >
+                    <Box stretch style={{ height: 40 }} >
                         <Input size="large" addonBefore={this.state.dir} placeholder="dir / key name" value={this.state.key} onChange={e => this.setState({ key: e.target.value })} />
                     </Box>
                     <div style={{ width: "100%", paddingTop: 10 }}>

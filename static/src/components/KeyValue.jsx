@@ -130,8 +130,8 @@ const KeyValue = React.createClass({
                     </Breadcrumb>
                 </Box>
                 <Box>
-                    <Box vertical style={{ minWidth: 400, paddingRight: 20 }}>
-                        <Box vertical>
+                    <Box vertical style={{ width: 400, paddingRight: 20 }}>
+                        <Box vertical >
                             {
                                 this.state.list.map(
                                     l => (<KeyValueItem key={l.key} enter={this._enter} set={this._set} unset={this._unset} info={l} />)
