@@ -19,7 +19,8 @@
     "xhr": "^2.2.2"
   },
   "scripts": {
-    "watch": "./node_modules/webpack/bin/webpack.js --watch",
-    "build": "./node_modules/webpack/bin/webpack.js"
+    "build": "./node_modules/webpack/bin/webpack.js",
+    "watch": "npm run build -- --watch",
+    "publish": "NODE_ENV=production npm run build -- --optimize-minimize"
   }
 }

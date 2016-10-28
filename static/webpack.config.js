@@ -1,8 +1,23 @@
 var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin')
+var webpack = require('webpack')
+
+var plugins = [
+    new HtmlWebpackPlugin({
+        filename: 'index.html',
+        template: './src/index.html',
+        inject: false,
+    })
+]
+
+process.env.NODE_ENV === 'production' ? plugins.push(new webpack.DefinePlugin({
+    "process.env": {
+        NODE_ENV: JSON.stringify("production")
+    }
+})) : null
 
 module.exports = {
-    devtool: "inline-source-map",
+    devtool: process.env.NODE_ENV === 'production' ? '' : 'inline-source-map',
     entry: './src/entry.jsx',
     output: {
         path: path.join(__dirname, '/dist'),
@@ -21,15 +36,9 @@ module.exports = {
                 plugins: ['antd']
             }
         }, {
-            test: /\.css$/,
-            loader: 'style-loader!css-loader'
-        }]
+                test: /\.css$/,
+                loader: 'style-loader!css-loader'
+            }]
     },
-    plugins: [
-        new HtmlWebpackPlugin({
-            filename: 'index.html',
-            template: './src/index.html',
-            inject: false,
-        }),
-    ]
+    plugins: plugins
 }
