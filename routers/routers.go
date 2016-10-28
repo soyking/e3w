@@ -10,7 +10,7 @@ func InitRouters(g *gin.Engine, etcdClt *clientv3.Client, client *client.EtcdHRC
 	g.GET("/", func(c *gin.Context) {
 		c.File("./static/dist/index.html")
 	})
-	g.Static("/public", "./static")
+	g.Static("/public", "./static/dist")
 
 	// key/value actions
 	g.GET("/kv/*key", resp(getKeyHandler(client)))
