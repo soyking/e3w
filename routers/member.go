@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	ETCD_CLIENT_TIMEOUT = 20 * time.Second
+	ETCD_CLIENT_TIMEOUT = 3 * time.Second
 
 	ROLE_LEADER   = "leader"
 	ROLE_FOLLOWER = "follower"
@@ -40,7 +40,7 @@ func getMembersHandler(client *clientv3.Client) respHandler {
 		members := []*Member{}
 		for _, member := range resp.Members {
 			if len(member.ClientURLs) > 0 {
-				m := &Member{Member: member, Role: ROLE_FOLLOWER, Status: STATUS_HEALTHY}
+				m := &Member{Member: member, Role: ROLE_FOLLOWER, Status: STATUS_UNHEALTHY}
 				resp, err := client.Status(newEtcdCtx(), m.ClientURLs[0])
 				if err == nil {
 					m.Status = STATUS_HEALTHY
