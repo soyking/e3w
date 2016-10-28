@@ -19,7 +19,7 @@ const KeyValue = React.createClass({
     _parseList(list) {
         list = list || []
         // sorted dir and normal kv
-        list.sort((l1, l2) => { return l1.is_dir == l2.is_dir ? l1.key > l2.key : l1.dir ? 0 : 1 })
+        list.sort((l1, l2) => { return l1.is_dir === l2.is_dir ? l1.key > l2.key : l1.dir ? 1 : 0 })
         // trim prefix of dir, get the relative path, +1 for /
         let prefixLen = this.state.dir.length + (this._isRoot() ? 0 : 1)
         list.forEach(l => {
@@ -124,7 +124,7 @@ const KeyValue = React.createClass({
                     <Breadcrumb>
                         {
                             this.state.menus.map(
-                                m => (<Breadcrumb.Item key={m.path} onClick={() => this._redirect(m.path)}><a>{m.name}</a></Breadcrumb.Item>)
+                                m => (<Breadcrumb.Item key={m.path} onClick={() => this._redirect(m.path) }><a>{m.name}</a></Breadcrumb.Item>)
                             )
                         }
                     </Breadcrumb>
@@ -142,7 +142,7 @@ const KeyValue = React.createClass({
                     <Box start flex style={{ paddingLeft: 20, borderLeft: "1px #E6E6E6 solid" }}>
                         {this.state.setting ?
                             (<KeyValueSetting currentKey={currentKey} delete={this._delete} />) :
-                            (<KeyValueCreate update={this._update} back={this._back} dir={this.state.dir} fullKey={this._fullKey} />)}
+                            (<KeyValueCreate update={this._update} back={this._back} dir={this.state.dir} fullKey={this._fullKey} />) }
 
                     </Box>
                 </Box>

@@ -40,5 +40,8 @@ function KVDelete(path, callback) {
     xhr.del("kv" + path, null, handler(callback))
 }
 
+function MembersGet(callback) {
+    xhr.get("members", handler(callback))
+}
 
-module.exports = { KVList, KVPut, KVDelete, KVGet, KVPost }
+module.exports = { KVList, KVPut, KVDelete, KVGet, KVPost, MembersGet }
