@@ -4,7 +4,6 @@ import (
 	"github.com/coreos/etcd/clientv3"
 	"github.com/coreos/etcd/etcdserver/etcdserverpb"
 	"github.com/gin-gonic/gin"
-	"golang.org/x/net/context"
 	"time"
 )
 
@@ -23,11 +22,6 @@ type Member struct {
 	Role   string `json:"role"`
 	Status string `json:"status"`
 	DbSize int64  `json:"db_size"`
-}
-
-func newEtcdCtx() context.Context {
-	ctx, _ := context.WithTimeout(context.Background(), ETCD_CLIENT_TIMEOUT)
-	return ctx
 }
 
 func getMembersHandler(client *clientv3.Client) respHandler {

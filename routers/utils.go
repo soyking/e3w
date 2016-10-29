@@ -3,6 +3,7 @@ package routers
 import (
 	"encoding/json"
 	"github.com/gin-gonic/gin"
+	"golang.org/x/net/context"
 	"io/ioutil"
 )
 
@@ -14,4 +15,9 @@ func parseBody(c *gin.Context, t interface{}) error {
 	}
 
 	return json.Unmarshal(body, t)
+}
+
+func newEtcdCtx() context.Context {
+	ctx, _ := context.WithTimeout(context.Background(), ETCD_CLIENT_TIMEOUT)
+	return ctx
 }

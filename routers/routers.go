@@ -20,4 +20,12 @@ func InitRouters(g *gin.Engine, etcdClt *clientv3.Client, client *client.EtcdHRC
 
 	// members actions
 	g.GET("/members", resp(getMembersHandler(etcdClt)))
+
+	// roles actions
+	g.GET("/roles", resp(getRolesHandler(etcdClt)))
+	g.POST("/role", resp(createRoleHandler(etcdClt)))
+	g.GET("/role/:name")
+	g.DELETE("/role/:name")
+	g.POST("/role/:name/permissions")
+	g.DELETE("/role/:name/permissions")
 }
