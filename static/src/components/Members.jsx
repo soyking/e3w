@@ -79,7 +79,6 @@ const Members = React.createClass({
     },
 
     render() {
-        // console.log(this.state.members)
         return (
             <Box centerJustified>
                 <Box vertical style={{ width: 800 }}>
