@@ -4,6 +4,8 @@ import { hashHistory, Router, Route, IndexRedirect } from 'react-router'
 import App from './components/App'
 import KeyValue from './components/KeyValue'
 import Members from './components/Members'
+import Roles from './components/Roles'
+import Users from './components/Users'
 import 'antd/dist/antd.min.css'
 import './css/patch.css'
 
@@ -14,6 +16,8 @@ ReactDOM.render((
             <Route path="kv" component={KeyValue} />
             <Route path="kv/*" component={KeyValue} />
             <Route path="members" component={Members} />
+            <Route path="roles" component={Roles} />
+            <Route path="users" component={Users} />
         </Route>
     </Router>
 ), document.querySelector(".root"))

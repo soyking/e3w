@@ -1,5 +1,5 @@
 import React from 'react'
-import { Menu, Icon } from 'antd'
+import { Menu, MenuItemGroup, Icon } from 'antd'
 import { Box } from 'react-polymer-layout'
 
 const App = React.createClass({
@@ -51,13 +51,18 @@ const App = React.createClass({
                         <Menu onClick={this.handleClick}
                             selectedKeys={[this.state.menu]}
                             mode="horizontal"
+                            style={{ fontWeight: 700, fontSize: 14 }}
                             >
                             <Menu.Item key="kv">
-                                <Icon type="menu-fold" /><span style={{ fontWeight: 700, fontSize: 14 }}>KEY / VALUE</span>
+                                <Icon type="menu-fold" /><span>KEY / VALUE</span>
                             </Menu.Item>
                             <Menu.Item key="members">
-                                <Icon type="tags" /><span style={{ fontWeight: 700, fontSize: 14 }}>MEMBERS</span>
+                                <Icon type="tags" /><span>MEMBERS</span>
                             </Menu.Item>
+                            <Menu.SubMenu key="auth" title={<span><Icon type="team" />AUTH</span>}>
+                                <Menu.Item key="roles">ROLES</Menu.Item>
+                                <Menu.Item key="users">USERS</Menu.Item>
+                            </Menu.SubMenu>
                         </Menu>
                     </Box>
                     <div style={{ paddingTop: 20 }}>
