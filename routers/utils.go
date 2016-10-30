@@ -5,6 +5,11 @@ import (
 	"github.com/gin-gonic/gin"
 	"golang.org/x/net/context"
 	"io/ioutil"
+	"time"
+)
+
+const (
+	ETCD_CLIENT_TIMEOUT = 3 * time.Second
 )
 
 func parseBody(c *gin.Context, t interface{}) error {

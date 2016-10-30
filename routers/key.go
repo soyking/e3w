@@ -1,7 +1,6 @@
 package routers
 
 import (
-	"encoding/base64"
 	"github.com/gin-gonic/gin"
 	"github.com/soyking/e3ch"
 )
@@ -10,11 +9,6 @@ type Node struct {
 	Key   string `json:"key"`
 	Value string `json:"value"`
 	IsDir bool   `json:"is_dir"`
-}
-
-func base64Decode(src string) (string, error) {
-	dst, err := base64.StdEncoding.DecodeString(src)
-	return string(dst), err
 }
 
 func parseNode(node *client.Node) *Node {

@@ -4,12 +4,9 @@ import (
 	"github.com/coreos/etcd/clientv3"
 	"github.com/coreos/etcd/etcdserver/etcdserverpb"
 	"github.com/gin-gonic/gin"
-	"time"
 )
 
 const (
-	ETCD_CLIENT_TIMEOUT = 3 * time.Second
-
 	ROLE_LEADER   = "leader"
 	ROLE_FOLLOWER = "follower"
 
