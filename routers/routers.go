@@ -8,17 +8,22 @@ import (
 
 type e3chHandler func(*gin.Context, *client.EtcdHRCHYClient) (interface{}, error)
 
-type etcdHandler func(*gin.Context, *clientv3.Client) (interface{}, error)
+type groupHandler func(e3chHandler) respHandler
 
-func etcdWrapper(e3chClt *client.EtcdHRCHYClient, h etcdHandler) respHandler {
-	return func(c *gin.Context) (interface{}, error) {
-		return h(c, e3chClt.EtcdClient())
+func withE3chGroup(e3chClt *client.EtcdHRCHYClient) groupHandler {
+	return func(h e3chHandler) respHandler {
+		return func(c *gin.Context) (interface{}, error) {
+			// TODO: make new client
+			return h(c, e3chClt)
+		}
 	}
 }
 
-func authWrapper(e3chClt *client.EtcdHRCHYClient, h e3chHandler) respHandler {
-	return func(c *gin.Context) (interface{}, error) {
-		return h(c, e3chClt)
+type etcdHandler func(*gin.Context, *clientv3.Client) (interface{}, error)
+
+func etcdWrapper(h etcdHandler) e3chHandler {
+	return func(c *gin.Context, e3chClt *client.EtcdHRCHYClient) (interface{}, error) {
+		return h(c, e3chClt.EtcdClient())
 	}
 }
 
@@ -28,29 +33,31 @@ func InitRouters(g *gin.Engine, etcdClt *clientv3.Client, client *client.EtcdHRC
 	})
 	g.Static("/public", "./static/dist")
 
+	e3chGroup := withE3chGroup(client)
+
 	// key/value actions
-	g.GET("/kv/*key", resp(getKeyHandler(client)))
-	g.POST("/kv/*key", resp(postKeyHandler(client)))
-	g.PUT("/kv/*key", resp(putKeyHandler(client)))
-	g.DELETE("/kv/*key", resp(delKeyHandler(client)))
+	g.GET("/kv/*key", resp(e3chGroup(getKeyHandler)))
+	g.POST("/kv/*key", resp(e3chGroup(postKeyHandler)))
+	g.PUT("/kv/*key", resp(e3chGroup(putKeyHandler)))
+	g.DELETE("/kv/*key", resp(e3chGroup(delKeyHandler)))
 
 	// members actions
-	g.GET("/members", resp(getMembersHandler(etcdClt)))
+	g.GET("/members", resp(e3chGroup(etcdWrapper(getMembersHandler))))
 
 	// roles actions
-	g.GET("/roles", resp(getRolesHandler(etcdClt)))
-	g.POST("/role", resp(createRoleHandler(etcdClt)))
-	g.GET("/role/:name", resp(getRolePermsHandler(etcdClt)))
-	g.DELETE("/role/:name", resp(deleteRoleHandler(etcdClt)))
-	g.POST("/role/:name/permission", resp(createRolePermHandler(etcdClt)))
-	g.DELETE("/role/:name/permission", resp(deleteRolePermHandler(etcdClt)))
+	g.GET("/roles", resp(e3chGroup(etcdWrapper(getRolesHandler))))
+	g.POST("/role", resp(e3chGroup(etcdWrapper(createRoleHandler))))
+	g.GET("/role/:name", resp(e3chGroup(etcdWrapper(getRolePermsHandler))))
+	g.DELETE("/role/:name", resp(e3chGroup(etcdWrapper(deleteRoleHandler))))
+	g.POST("/role/:name/permission", resp(e3chGroup(etcdWrapper(createRolePermHandler))))
+	g.DELETE("/role/:name/permission", resp(e3chGroup(etcdWrapper(deleteRolePermHandler))))
 
 	// users actions
-	g.GET("/users", resp(getUsersHandler(etcdClt)))
-	g.POST("/user", resp(createUserHandler(etcdClt)))
-	g.GET("/user/:name", resp(getUserRolesHandler(etcdClt)))
-	g.DELETE("/user/:name", resp(deleteUserHandler(etcdClt)))
-	g.PUT("/user/:name/password", resp(setUserPasswordHandler(etcdClt)))
-	g.PUT("/user/:name/role/:role", resp(grantUserRoleHandler(etcdClt)))
-	g.DELETE("/user/:name/role/:role", resp(revorkeUserRoleHandler(etcdClt)))
+	g.GET("/users", resp(e3chGroup(etcdWrapper(getUsersHandler))))
+	g.POST("/user", resp(e3chGroup(etcdWrapper(createUserHandler))))
+	g.GET("/user/:name", resp(e3chGroup(etcdWrapper(getUserRolesHandler))))
+	g.DELETE("/user/:name", resp(e3chGroup(etcdWrapper(deleteUserHandler))))
+	g.PUT("/user/:name/password", resp(e3chGroup(etcdWrapper(setUserPasswordHandler))))
+	g.PUT("/user/:name/role/:role", resp(e3chGroup(etcdWrapper(grantUserRoleHandler))))
+	g.DELETE("/user/:name/role/:role", resp(e3chGroup(etcdWrapper(revorkeUserRoleHandler))))
 }

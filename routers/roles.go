@@ -6,14 +6,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func getRolesHandler(client *clientv3.Client) respHandler {
-	return func(c *gin.Context) (interface{}, error) {
-		resp, err := client.RoleList(newEtcdCtx())
-		if err != nil {
-			return nil, err
-		} else {
-			return resp.Roles, nil
-		}
+func getRolesHandler(c *gin.Context, client *clientv3.Client) (interface{}, error) {
+	resp, err := client.RoleList(newEtcdCtx())
+	if err != nil {
+		return nil, err
+	} else {
+		return resp.Roles, nil
 	}
 }
 
@@ -21,21 +19,19 @@ type createRoleRequest struct {
 	Name string `json:"name"`
 }
 
-func createRoleHandler(client *clientv3.Client) respHandler {
-	return func(c *gin.Context) (interface{}, error) {
-		r := new(createRoleRequest)
-		err := parseBody(c, r)
-		if err != nil {
-			return nil, err
-		}
-
-		if r.Name == "" {
-			return nil, errRoleName
-		}
-
-		_, err = client.RoleAdd(newEtcdCtx(), r.Name)
+func createRoleHandler(c *gin.Context, client *clientv3.Client) (interface{}, error) {
+	r := new(createRoleRequest)
+	err := parseBody(c, r)
+	if err != nil {
 		return nil, err
 	}
+
+	if r.Name == "" {
+		return nil, errRoleName
+	}
+
+	_, err = client.RoleAdd(newEtcdCtx(), r.Name)
+	return nil, err
 }
 
 type Perm struct {
@@ -57,32 +53,28 @@ func parsePerms(etcdPerms []*authpb.Permission) []*Perm {
 	return perms
 }
 
-func getRolePermsHandler(client *clientv3.Client) respHandler {
-	return func(c *gin.Context) (interface{}, error) {
-		name := c.Param("name")
-		if name == "" {
-			return nil, errRoleName
-		}
+func getRolePermsHandler(c *gin.Context, client *clientv3.Client) (interface{}, error) {
+	name := c.Param("name")
+	if name == "" {
+		return nil, errRoleName
+	}
 
-		resp, err := client.RoleGet(newEtcdCtx(), name)
-		if err != nil {
-			return nil, err
-		} else {
-			return parsePerms(resp.Perm), nil
-		}
+	resp, err := client.RoleGet(newEtcdCtx(), name)
+	if err != nil {
+		return nil, err
+	} else {
+		return parsePerms(resp.Perm), nil
 	}
 }
 
-func deleteRoleHandler(client *clientv3.Client) respHandler {
-	return func(c *gin.Context) (interface{}, error) {
-		name := c.Param("name")
-		if name == "" {
-			return nil, errRoleName
-		}
-
-		_, err := client.RoleDelete(newEtcdCtx(), name)
-		return nil, err
+func deleteRoleHandler(c *gin.Context, client *clientv3.Client) (interface{}, error) {
+	name := c.Param("name")
+	if name == "" {
+		return nil, errRoleName
 	}
+
+	_, err := client.RoleDelete(newEtcdCtx(), name)
+	return nil, err
 }
 
 type createRolePermRequest struct {
@@ -91,31 +83,29 @@ type createRolePermRequest struct {
 	PermType string `json:"perm_type"`
 }
 
-func createRolePermHandler(client *clientv3.Client) respHandler {
-	return func(c *gin.Context) (interface{}, error) {
-		name := c.Param("name")
-		if name == "" {
-			return nil, errRoleName
-		}
-
-		r := new(createRolePermRequest)
-		err := parseBody(c, r)
-		if err != nil {
-			return nil, err
-		}
-
-		tp, ok := authpb.Permission_Type_value[r.PermType]
-		if !ok {
-			return nil, errInvalidPermType
-		}
-
-		_, withPrefix := c.GetQuery("prefix")
-		if withPrefix {
-			r.RangeEnd = clientv3.GetPrefixRangeEnd(r.Key)
-		}
-
-		return client.RoleGrantPermission(newEtcdCtx(), name, r.Key, r.RangeEnd, clientv3.PermissionType(tp))
+func createRolePermHandler(c *gin.Context, client *clientv3.Client) (interface{}, error) {
+	name := c.Param("name")
+	if name == "" {
+		return nil, errRoleName
 	}
+
+	r := new(createRolePermRequest)
+	err := parseBody(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	tp, ok := authpb.Permission_Type_value[r.PermType]
+	if !ok {
+		return nil, errInvalidPermType
+	}
+
+	_, withPrefix := c.GetQuery("prefix")
+	if withPrefix {
+		r.RangeEnd = clientv3.GetPrefixRangeEnd(r.Key)
+	}
+
+	return client.RoleGrantPermission(newEtcdCtx(), name, r.Key, r.RangeEnd, clientv3.PermissionType(tp))
 }
 
 type deleteRolePermRequest struct {
@@ -123,19 +113,17 @@ type deleteRolePermRequest struct {
 	RangeEnd string `json:"range_end"`
 }
 
-func deleteRolePermHandler(client *clientv3.Client) respHandler {
-	return func(c *gin.Context) (interface{}, error) {
-		name := c.Param("name")
-		if name == "" {
-			return nil, errRoleName
-		}
-
-		r := new(deleteRolePermRequest)
-		err := parseBody(c, r)
-		if err != nil {
-			return nil, err
-		}
-
-		return client.RoleRevokePermission(newEtcdCtx(), name, r.Key, r.RangeEnd)
+func deleteRolePermHandler(c *gin.Context, client *clientv3.Client) (interface{}, error) {
+	name := c.Param("name")
+	if name == "" {
+		return nil, errRoleName
 	}
+
+	r := new(deleteRolePermRequest)
+	err := parseBody(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return client.RoleRevokePermission(newEtcdCtx(), name, r.Key, r.RangeEnd)
 }

@@ -19,30 +19,28 @@ func parseNode(node *client.Node) *Node {
 	}
 }
 
-func getKeyHandler(client *client.EtcdHRCHYClient) respHandler {
-	return func(c *gin.Context) (interface{}, error) {
-		_, list := c.GetQuery("list")
-		key := c.Param("key")
+func getKeyHandler(c *gin.Context, client *client.EtcdHRCHYClient) (interface{}, error) {
+	_, list := c.GetQuery("list")
+	key := c.Param("key")
 
-		if list {
-			nodes, err := client.List(key)
-			if err != nil {
-				return nil, err
-			}
-
-			realNodes := []*Node{}
-			for _, node := range nodes {
-				realNodes = append(realNodes, parseNode(node))
-			}
-			return realNodes, nil
-		} else {
-			node, err := client.Get(key)
-			if err != nil {
-				return nil, err
-			}
-
-			return parseNode(node), nil
+	if list {
+		nodes, err := client.List(key)
+		if err != nil {
+			return nil, err
 		}
+
+		realNodes := []*Node{}
+		for _, node := range nodes {
+			realNodes = append(realNodes, parseNode(node))
+		}
+		return realNodes, nil
+	} else {
+		node, err := client.Get(key)
+		if err != nil {
+			return nil, err
+		}
+
+		return parseNode(node), nil
 	}
 }
 
@@ -50,38 +48,32 @@ type postRequest struct {
 	Value string `json:"value"`
 }
 
-func postKeyHandler(client *client.EtcdHRCHYClient) respHandler {
-	return func(c *gin.Context) (interface{}, error) {
-		_, dir := c.GetQuery("dir")
-		key := c.Param("key")
+func postKeyHandler(c *gin.Context, client *client.EtcdHRCHYClient) (interface{}, error) {
+	_, dir := c.GetQuery("dir")
+	key := c.Param("key")
 
-		if dir {
-			return nil, client.CreateDir(key)
-		} else {
-			r := new(postRequest)
-			err := parseBody(c, r)
-			if err != nil {
-				return nil, err
-			}
-			return nil, client.Create(key, r.Value)
-		}
-	}
-}
-
-func putKeyHandler(client *client.EtcdHRCHYClient) respHandler {
-	return func(c *gin.Context) (interface{}, error) {
-		key := c.Param("key")
+	if dir {
+		return nil, client.CreateDir(key)
+	} else {
 		r := new(postRequest)
 		err := parseBody(c, r)
 		if err != nil {
 			return nil, err
 		}
-		return nil, client.Put(key, r.Value)
+		return nil, client.Create(key, r.Value)
 	}
 }
 
-func delKeyHandler(client *client.EtcdHRCHYClient) respHandler {
-	return func(c *gin.Context) (interface{}, error) {
-		return nil, client.Delete(c.Param("key"))
+func putKeyHandler(c *gin.Context, client *client.EtcdHRCHYClient) (interface{}, error) {
+	key := c.Param("key")
+	r := new(postRequest)
+	err := parseBody(c, r)
+	if err != nil {
+		return nil, err
 	}
+	return nil, client.Put(key, r.Value)
+}
+
+func delKeyHandler(c *gin.Context, client *client.EtcdHRCHYClient) (interface{}, error) {
+	return nil, client.Delete(c.Param("key"))
 }
