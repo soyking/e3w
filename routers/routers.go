@@ -6,6 +6,22 @@ import (
 	"github.com/soyking/e3ch"
 )
 
+type e3chHandler func(*gin.Context, *client.EtcdHRCHYClient) (interface{}, error)
+
+type etcdHandler func(*gin.Context, *clientv3.Client) (interface{}, error)
+
+func etcdWrapper(e3chClt *client.EtcdHRCHYClient, h etcdHandler) respHandler {
+	return func(c *gin.Context) (interface{}, error) {
+		return h(c, e3chClt.EtcdClient())
+	}
+}
+
+func authWrapper(e3chClt *client.EtcdHRCHYClient, h e3chHandler) respHandler {
+	return func(c *gin.Context) (interface{}, error) {
+		return h(c, e3chClt)
+	}
+}
+
 func InitRouters(g *gin.Engine, etcdClt *clientv3.Client, client *client.EtcdHRCHYClient) {
 	g.GET("/", func(c *gin.Context) {
 		c.File("./static/dist/index.html")
