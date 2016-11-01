@@ -4,6 +4,7 @@ import (
 	"github.com/coreos/etcd/auth/authpb"
 	"github.com/coreos/etcd/clientv3"
 	"github.com/gin-gonic/gin"
+	"github.com/soyking/e3ch"
 )
 
 func getRolesHandler(c *gin.Context, client *clientv3.Client) (interface{}, error) {
@@ -34,37 +35,13 @@ func createRoleHandler(c *gin.Context, client *clientv3.Client) (interface{}, er
 	return nil, err
 }
 
-type Perm struct {
-	PermType string `json:"perm_type"`
-	Key      string `json:"key"`
-	RangeEnd string `json:"range_end"`
-}
-
-func parsePerms(etcdPerms []*authpb.Permission) []*Perm {
-	perms := []*Perm{}
-	for _, p := range etcdPerms {
-		perm := &Perm{
-			PermType: authpb.Permission_Type_name[int32(p.PermType)],
-			Key:      string(p.Key),
-			RangeEnd: string(p.RangeEnd),
-		}
-		perms = append(perms, perm)
-	}
-	return perms
-}
-
-func getRolePermsHandler(c *gin.Context, client *clientv3.Client) (interface{}, error) {
+func getRolePermsHandler(c *gin.Context, client *client.EtcdHRCHYClient) (interface{}, error) {
 	name := c.Param("name")
 	if name == "" {
 		return nil, errRoleName
 	}
 
-	resp, err := client.RoleGet(newEtcdCtx(), name)
-	if err != nil {
-		return nil, err
-	} else {
-		return parsePerms(resp.Perm), nil
-	}
+	return client.GetRolePerms(name)
 }
 
 func deleteRoleHandler(c *gin.Context, client *clientv3.Client) (interface{}, error) {
@@ -83,7 +60,7 @@ type createRolePermRequest struct {
 	PermType string `json:"perm_type"`
 }
 
-func createRolePermHandler(c *gin.Context, client *clientv3.Client) (interface{}, error) {
+func createRolePermHandler(c *gin.Context, client *client.EtcdHRCHYClient) (interface{}, error) {
 	name := c.Param("name")
 	if name == "" {
 		return nil, errRoleName
@@ -105,7 +82,7 @@ func createRolePermHandler(c *gin.Context, client *clientv3.Client) (interface{}
 		r.RangeEnd = clientv3.GetPrefixRangeEnd(r.Key)
 	}
 
-	return client.RoleGrantPermission(newEtcdCtx(), name, r.Key, r.RangeEnd, clientv3.PermissionType(tp))
+	return nil, client.RoleGrantPermission(name, r.Key, r.RangeEnd, clientv3.PermissionType(tp))
 }
 
 type deleteRolePermRequest struct {
@@ -113,7 +90,7 @@ type deleteRolePermRequest struct {
 	RangeEnd string `json:"range_end"`
 }
 
-func deleteRolePermHandler(c *gin.Context, client *clientv3.Client) (interface{}, error) {
+func deleteRolePermHandler(c *gin.Context, client *client.EtcdHRCHYClient) (interface{}, error) {
 	name := c.Param("name")
 	if name == "" {
 		return nil, errRoleName
@@ -125,5 +102,10 @@ func deleteRolePermHandler(c *gin.Context, client *clientv3.Client) (interface{}
 		return nil, err
 	}
 
-	return client.RoleRevokePermission(newEtcdCtx(), name, r.Key, r.RangeEnd)
+	_, withPrefix := c.GetQuery("prefix")
+	if withPrefix {
+		r.RangeEnd = clientv3.GetPrefixRangeEnd(r.Key)
+	}
+
+	return nil, client.RoleRevokePermission(name, r.Key, r.RangeEnd)
 }

@@ -47,10 +47,10 @@ func InitRouters(g *gin.Engine, etcdClt *clientv3.Client, client *client.EtcdHRC
 	// roles actions
 	g.GET("/roles", resp(e3chGroup(etcdWrapper(getRolesHandler))))
 	g.POST("/role", resp(e3chGroup(etcdWrapper(createRoleHandler))))
-	g.GET("/role/:name", resp(e3chGroup(etcdWrapper(getRolePermsHandler))))
+	g.GET("/role/:name", resp(e3chGroup(getRolePermsHandler)))
 	g.DELETE("/role/:name", resp(e3chGroup(etcdWrapper(deleteRoleHandler))))
-	g.POST("/role/:name/permission", resp(e3chGroup(etcdWrapper(createRolePermHandler))))
-	g.DELETE("/role/:name/permission", resp(e3chGroup(etcdWrapper(deleteRolePermHandler))))
+	g.POST("/role/:name/permission", resp(e3chGroup(createRolePermHandler)))
+	g.DELETE("/role/:name/permission", resp(e3chGroup(deleteRolePermHandler)))
 
 	// users actions
 	g.GET("/users", resp(e3chGroup(etcdWrapper(getUsersHandler))))
