@@ -57,8 +57,13 @@ function RolesGet(name, callback) {
     xhr.get("role/" + name, handler(callback))
 }
 
+function RolesAddPerm(name, permType, key, rangeEnd, prefix, callback) {
+    let bodyStr = JSON.stringify({ perm_type: permType, key: key, range_end: rangeEnd })
+    xhr.post("role/" + name + "/permission" + (prefix ? "?prefix" : ""), { body: bodyStr }, handler(callback))
+}
+
 module.exports = {
     KVList, KVPut, KVDelete, KVGet, KVPost,
     MembersGet,
-    RolesAll, RolesPost, RolesGet
+    RolesAll, RolesPost, RolesGet, RolesAddPerm
 }
