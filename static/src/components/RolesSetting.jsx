@@ -1,12 +1,51 @@
 import React from 'react'
 import { Box } from 'react-polymer-layout'
 import { RolesGet, RolesAddPerm } from './request'
-import { Radio, Input, Button } from 'antd'
+import { Radio, Input, Button, Tooltip } from 'antd'
+
 const RadioButton = Radio.Button
 const RadioGroup = Radio.Group
-
 const PermTypes = ["READWRITE", "READ", "WRITE"]
 const KeyTypes = ["RANGE", "PREFIX"]
+
+const PermItem = React.createClass({
+    render() {
+        let perm = this.props.perm
+        let typeColor = "#ccc"
+        switch (perm.perm_type) {
+            case "READWRITE":
+                typeColor = "#f60"
+                break
+            case "READ":
+                typeColor = "#5fbc29"
+                break
+            case "WRITE":
+                typeColor = "#01b3ca"
+                break
+        }
+        return (
+            <Box style={{
+                width: "100%", height: 40,
+                borderStyle: "solid", borderWidth: 2, borderColor: "#ddd", borderRadius: 8,
+                fontWeight: 700, fontSize: 16
+            }}>
+                <Box center centerJustified style={{ backgroundColor: typeColor, height: "100%", width: 120, borderRadius: "6px 0px 0px 6px" }}>
+                    {perm.perm_type}
+                </Box>
+                <Tooltip title="KEY">
+                    <Box center centerJustified flex style={{ borderRight: "1px solid #ddd" }}>
+                        {perm.key}
+                    </Box>
+                </Tooltip>
+                <Tooltip title="RANGE END">
+                    <Box center centerJustified flex>
+                        {perm.range_end}
+                    </Box>
+                </Tooltip>
+            </Box>
+        )
+    }
+})
 
 const RolesSetting = React.createClass({
     _getRoleDone(result) {
@@ -52,13 +91,17 @@ const RolesSetting = React.createClass({
 
     render() {
         let radioStyle = { padding: "5px 0px 5px 0px" }
-        let typeStyle = { width: 80, fontSize: 13 }
+        let typeStyle = { width: 120, paddingLeft: 3 }
         let cantClick = this.state.key === ""
         return (
             <Box vertical >
-                {this.state.perms.map(p => { return p.key })}
-                <Box style={{ borderTop: "1px solid #ddd" }}>
-                    <Box vertical style={{ margin: 10, width: "100%" }}>
+                <Box vertical style={{ padding: 10, width: "100%" }}>
+                    {this.state.perms.map(p => {
+                        return <div style={radioStyle} key={Math.random()}> <PermItem perm={p} /></div>
+                    })}
+                </Box>
+                <Box style={{ borderTop: "1px solid #ddd", fontWeight: 700, fontSize: 16 }}>
+                    <Box vertical style={{ margin: 12, width: "100%" }}>
                         <Box style={radioStyle}>
                             <Box center style={typeStyle}>Perm Type</Box>
                             <RadioGroup onChange={this._selectPermType} defaultValue={PermTypes[0]}>
@@ -72,11 +115,11 @@ const RolesSetting = React.createClass({
                             </RadioGroup>
                         </Box>
                         <Box style={radioStyle} >
-                            <Box center style={typeStyle}>From</Box>
+                            <Box center style={typeStyle}>Key</Box>
                             <Input size="large" key="key" value={this.state.key} onChange={e => this.setState({ key: e.target.value })} />
                         </Box>
                         <Box style={radioStyle}>
-                            <Box center style={typeStyle}>To</Box>
+                            <Box center style={typeStyle}>RangeEnd</Box>
                             <Input size="large" key="rangeEnd" value={this.state.rangeEnd} onChange={e => this.setState({ rangeEnd: e.target.value })} />
                         </Box>
                         <Box endJustified style={radioStyle} >
