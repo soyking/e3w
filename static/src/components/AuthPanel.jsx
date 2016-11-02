@@ -1,6 +1,7 @@
 import React from 'react'
 import { Box } from 'react-polymer-layout'
 import { Input, Button } from 'antd'
+import { CommonPanel } from './utils'
 
 const AuthItem = React.createClass({
     render() {
@@ -42,11 +43,7 @@ const AuthCreate = React.createClass({
     render() {
         let hint = "CREATE " + (this.props.name || "")
         return (
-            <Box vertical style={{ border: "2px solid", borderRadius: 4, width: "100%", borderColor: "#ddd" }}>
-                <div style={{ height: 20, backgroundColor: "#ddd" }}></div>
-                <Box center style={{ height: 50, fontSize: 20, fontWeight: 500, borderBottom: "1px solid #ddd", paddingLeft: 10 }}>
-                    {hint}
-                </Box>
+            <CommonPanel hint={hint}>
                 <Box vertical style={{ padding: "10px 7px 0px 7px" }}>
                     <div style={{ width: "100%", paddingTop: 10 }}>
                         <Input size="large" value={this.state.name} onChange={e => this.setState({ name: e.target.value }) } />
@@ -57,7 +54,7 @@ const AuthCreate = React.createClass({
                         </div>
                     </Box>
                 </Box>
-            </Box >
+            </CommonPanel>
         )
     }
 })

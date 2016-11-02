@@ -2,7 +2,7 @@ import React from 'react'
 import { Input, Button } from 'antd'
 import { Box } from 'react-polymer-layout'
 import { KVPost, KVDelete } from './request'
-import { DeleteButton } from './utils'
+import { DeleteButton, CommonPanel } from './utils'
 
 const KeyValueCreate = React.createClass({
     _createDone(result) {
@@ -47,11 +47,7 @@ const KeyValueCreate = React.createClass({
     render() {
         let cantClick = this.state.key === ""
         return (
-            <Box vertical className="kv-editor" style={{ borderColor: "#ddd", width: "100%" }}>
-                <div style={{ height: 20, backgroundColor: "#ddd" }}></div>
-                <Box center style={{ height: 50, fontSize: 20, fontWeight: 500, borderBottom: "1px solid #ddd", paddingLeft: 10 }}>
-                    Create Key
-                </Box>
+            <CommonPanel hint="CREATE">
                 <Box vertical style={{ padding: "10px 7px 0px 7px" }}>
                     <Box stretch style={{ height: 40 }} >
                         <Input size="large" addonBefore={this.state.dir} placeholder="dir / key name" value={this.state.key} onChange={e => this.setState({ key: e.target.value })} />
@@ -72,7 +68,7 @@ const KeyValueCreate = React.createClass({
                         }
                     </Box>
                 </Box>
-            </Box>
+            </CommonPanel>
         )
     }
 })

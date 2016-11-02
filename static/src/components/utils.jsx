@@ -1,5 +1,6 @@
 import React from 'react'
 import { Popconfirm, Button } from 'antd'
+import { Box } from 'react-polymer-layout'
 
 const DeleteButton = React.createClass({
     render() {
@@ -11,4 +12,19 @@ const DeleteButton = React.createClass({
     }
 })
 
-module.exports = { DeleteButton }
+const CommonPanel = React.createClass({
+    render() {
+        let bColor = this.props.color ? this.props.color : "#ddd"
+        return (
+            <Box vertical style={{ border: "2px solid", borderRadius: 4, width: "100%", borderColor: bColor }}>
+                <div style={{ height: 20, backgroundColor: bColor }}></div>
+                <Box center style={{ height: 50, fontSize: 20, fontWeight: 500, borderBottom: "1px solid #ddd", paddingLeft: 10 }}>
+                    {this.props.hint || ""}
+                </Box>
+                {this.props.children}
+            </Box >
+        )
+    }
+})
+
+module.exports = { DeleteButton, CommonPanel }
