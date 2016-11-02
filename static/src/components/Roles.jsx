@@ -1,6 +1,7 @@
 import React from 'react'
 import AuthPanel from './AuthPanel'
 import { RolesAll, RolesPost } from './request'
+import RolesSetting from './RolesSetting'
 
 let roles = ["abc", "def"]
 
@@ -33,9 +34,13 @@ const Roles = React.createClass({
         return { roles: [] }
     },
 
+    _setting(name) {
+        return <RolesSetting name={name}/>
+    },
+
     render() {
         return (
-            <AuthPanel title="ROLES" items={this.state.roles} create={this._create}/>
+            <AuthPanel title="ROLES" items={this.state.roles} create={this._create} setting={this._setting}/>
         )
     }
 })

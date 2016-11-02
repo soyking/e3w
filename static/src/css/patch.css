@@ -8,12 +8,6 @@
     border-color: red;
 }
 
-.kv-editor{
-    border: 2px solid;
-    border-radius: 4px;
-    width: 100%;
-}
-
 .kv-create-button{
     padding: 15px 15px 12px 0px;
 }

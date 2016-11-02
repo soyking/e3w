@@ -3,7 +3,7 @@ import { Input, Button } from 'antd'
 import { Box } from 'react-polymer-layout'
 import { message } from 'antd'
 import { KVGet, KVPut, KVDelete } from './request'
-import { DeleteButton, CommonPanel } from './utils'
+import { DeleteButton } from './utils'
 
 const KeyValueSetting = React.createClass({
     _getDone(result) {
@@ -51,19 +51,17 @@ const KeyValueSetting = React.createClass({
 
     render() {
         return (
-            <CommonPanel hint={this.props.currentKey} color="#cce4f6">
-                <Box vertical style={{ padding: "10px 7px 0px 7px" }}>
-                    <div style={{ width: "100%", paddingTop: 10 }}>
-                        <Input type="textarea" rows={4} value={this.state.value} onChange={e => this.setState({ value: e.target.value }) } />
+            <Box vertical style={{ padding: "10px 7px 0px 7px" }}>
+                <div style={{ width: "100%", paddingTop: 10 }}>
+                    <Input type="textarea" rows={4} value={this.state.value} onChange={e => this.setState({ value: e.target.value }) } />
+                </div>
+                <Box justified>
+                    <div className="kv-create-button" ><Button size="large" type="primary" onClick={this._update} >UPDATE</Button></div>
+                    <div className="kv-create-button" style={{ paddingRight: 0 }}>
+                        <DeleteButton name="DELETE KEY" delete={this._delete} />
                     </div>
-                    <Box justified>
-                        <div className="kv-create-button" ><Button size="large" type="primary" onClick={this._update} >UPDATE</Button></div>
-                        <div className="kv-create-button" style={{ paddingRight: 0 }}>
-                            <DeleteButton name="DELETE KEY" delete={this._delete} />
-                        </div>
-                    </Box>
-                </Box >
-            </CommonPanel >
+                </Box>
+            </Box >
         )
     }
 })

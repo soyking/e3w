@@ -5,6 +5,7 @@ import { KVList } from './request'
 import KeyValueCreate from './KeyValueCreate'
 import KeyValueItem from './KeyValueItem'
 import KeyValueSetting from './KeyValueSetting'
+import { CommonPanel } from './utils'
 
 const KeyValue = React.createClass({
     // states:
@@ -139,12 +140,10 @@ const KeyValue = React.createClass({
                             }
                         </Box>
                     </Box>
-                    <Box start flex style={{ paddingLeft: 20, borderLeft: "1px #E6E6E6 solid" }}>
-                        {this.state.setting ?
-                            (<KeyValueSetting currentKey={currentKey} delete={this._delete} />) :
-                            (<KeyValueCreate update={this._update} back={this._back} dir={this.state.dir} fullKey={this._fullKey} />) }
 
-                    </Box>
+                    {this.state.setting ?
+                        (<CommonPanel hint={currentKey} color="#cce4f6"><KeyValueSetting currentKey={currentKey} delete={this._delete} /></CommonPanel>) :
+                        (<CommonPanel hint="CREATE"><KeyValueCreate update={this._update} back={this._back} dir={this.state.dir} fullKey={this._fullKey} /></CommonPanel>) }
                 </Box>
             </Box >
         )

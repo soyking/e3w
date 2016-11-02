@@ -53,4 +53,12 @@ function RolesPost(name, callback) {
     xhr.post("role", { body: bodyStr }, handler(callback))
 }
 
-module.exports = { KVList, KVPut, KVDelete, KVGet, KVPost, MembersGet, RolesAll, RolesPost }
+function RolesGet(name, callback) {
+    xhr.get("role/" + name, handler(callback))
+}
+
+module.exports = {
+    KVList, KVPut, KVDelete, KVGet, KVPost,
+    MembersGet,
+    RolesAll, RolesPost, RolesGet
+}

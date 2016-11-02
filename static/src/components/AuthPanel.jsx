@@ -41,20 +41,17 @@ const AuthCreate = React.createClass({
     },
 
     render() {
-        let hint = "CREATE " + (this.props.name || "")
         return (
-            <CommonPanel hint={hint}>
-                <Box vertical style={{ padding: "10px 7px 0px 7px" }}>
-                    <div style={{ width: "100%", paddingTop: 10 }}>
-                        <Input size="large" value={this.state.name} onChange={e => this.setState({ name: e.target.value }) } />
+            <Box vertical style={{ padding: "10px 7px 0px 7px" }}>
+                <div style={{ width: "100%", paddingTop: 10 }}>
+                    <Input size="large" value={this.state.name} onChange={e => this.setState({ name: e.target.value }) } />
+                </div>
+                <Box endJustified>
+                    <div style={{ "padding": "15px 0px 15px" }}>
+                        <Button type="primary" size="large" onClick={() => this.props.create(this.state.name) } disabled={this.state.name === ""} > CREATE </Button>
                     </div>
-                    <Box endJustified>
-                        <div style={{ "padding": "15px 0px 15px" }}>
-                            <Button type="primary" size="large" onClick={() => this.props.create(this.state.name) } disabled={this.state.name === ""} > {hint}</Button>
-                        </div>
-                    </Box>
                 </Box>
-            </CommonPanel>
+            </Box>
         )
     }
 })
@@ -63,14 +60,25 @@ const AuthPanel = React.createClass({
     _prepareItems(props) {
         let rawItems = props.items || []
         let items = []
-        rawItems.forEach(i => { items.push({ name: i, key: Math.random(), selected: false }) })
+        rawItems.forEach(i => { items.push({ name: i, selected: false }) })
         this.setState({ items: items })
     },
 
-    _selectItem(key) {
+    _selectItem(name) {
         let items = this.state.items
-        items.forEach(i => { if (i.key === key) { i.selected = !i.selected } else { i.selected = false } })
-        this.setState({ items: items, selectedItem: key })
+        let unset = false
+        items.forEach(i => {
+            if (i.name === name) {
+                if (i.selected) {
+                    unset = true
+                }
+                i.selected = !i.selected
+            }
+            else {
+                i.selected = false
+            }
+        })
+        this.setState({ items: items, selectedItem: unset ? "" : name })
     },
 
     _create(name) {
@@ -91,6 +99,16 @@ const AuthPanel = React.createClass({
 
     render() {
         let title = this.props.title || ""
+        let panelHint = "CREATE " + title
+        let sidePanel = null
+        if (this.state.selectedItem) {
+            if (this.props.setting) {
+                sidePanel = this.props.setting(this.state.selectedItem)
+                panelHint = "SETTING"
+            }
+        } else {
+            sidePanel = <AuthCreate create={this._create}/>
+        }
         return (
             <Box vertical>
                 <div style={{
@@ -107,15 +125,15 @@ const AuthPanel = React.createClass({
                     }}>
                         {
                             this.state.items.map(
-                                i => (<AuthItem key={ i.key } click={ () => this._selectItem(i.key) } item={i} />)
+                                i => (<AuthItem key={ i.name } click={ () => this._selectItem(i.name) } item={i} />)
                             )
                         }
                     </Box>
-                    <Box start flex style={{ paddingLeft: 20, borderLeft: "1px #E6E6E6 solid" }}>
-                        <AuthCreate name={title} create={this._create}/>
-                    </Box>
+                    <CommonPanel hint={panelHint}>
+                        {sidePanel}
+                    </CommonPanel>
                 </Box>
-            </Box>
+            </Box >
         )
     }
 })
