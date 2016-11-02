@@ -28,9 +28,9 @@ const KeyValue = React.createClass({
         this.setState({ list: list })
     },
 
-    // dir should be / for /abc/def
+    // dir should be / or /abc/def
     _ParseDir(dir) {
-        let menus = [{ path: "/", name: "root" }]
+        let menus = [{ path: "/", name: "ROOT" }]
         if (dir !== "/") {
             let keys = dir.split("/")
             for (let i = 1; i < keys.length; i++) {
