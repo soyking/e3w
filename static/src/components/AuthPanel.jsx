@@ -1,5 +1,6 @@
 import React from 'react'
 import { Box } from 'react-polymer-layout'
+import { Input, Button } from 'antd'
 
 const AuthItem = React.createClass({
     render() {
@@ -21,9 +22,49 @@ const AuthItem = React.createClass({
     }
 })
 
+const AuthCreate = React.createClass({
+    _clean() {
+        this.setState({ name: "" })
+    },
+
+    componentDidMount() {
+        this._clean()
+    },
+
+    componentWillReceiveProps(nextProps) {
+        this._clean()
+    },
+
+    getInitialState() {
+        return { name: "" }
+    },
+
+    render() {
+        let hint = "CREATE " + (this.props.name || "")
+        return (
+            <Box vertical style={{ border: "2px solid", borderRadius: 4, width: "100%", borderColor: "#ddd" }}>
+                <div style={{ height: 20, backgroundColor: "#ddd" }}></div>
+                <Box center style={{ height: 50, fontSize: 20, fontWeight: 500, borderBottom: "1px solid #ddd", paddingLeft: 10 }}>
+                    {hint}
+                </Box>
+                <Box vertical style={{ padding: "10px 7px 0px 7px" }}>
+                    <div style={{ width: "100%", paddingTop: 10 }}>
+                        <Input size="large" value={this.state.name} onChange={e => this.setState({ name: e.target.value }) } />
+                    </div>
+                    <Box endJustified>
+                        <div style={{ "padding": "15px 0px 15px" }}>
+                            <Button type="primary" size="large" onClick={() => this.props.create(this.state.name) } disabled={this.state.name === ""} > {hint}</Button>
+                        </div>
+                    </Box>
+                </Box>
+            </Box >
+        )
+    }
+})
+
 const AuthPanel = React.createClass({
-    _fetchItems() {
-        let rawItems = this.props.getItems && this.props.getItems() || []
+    _prepareItems(props) {
+        let rawItems = props.items || []
         let items = []
         rawItems.forEach(i => { items.push({ name: i, key: Math.random(), selected: false }) })
         this.setState({ items: items })
@@ -35,12 +76,16 @@ const AuthPanel = React.createClass({
         this.setState({ items: items, selectedItem: key })
     },
 
+    _create(name) {
+        this.props.create(name)
+    },
+
     componentDidMount() {
-        this._fetchItems()
+        this._prepareItems(this.props)
     },
 
     componentWillReceiveProps(nextProps) {
-        this._fetchItems()
+        this._prepareItems(nextProps)
     },
 
     getInitialState() {
@@ -48,6 +93,7 @@ const AuthPanel = React.createClass({
     },
 
     render() {
+        let title = this.props.title || ""
         return (
             <Box vertical>
                 <div style={{
@@ -67,6 +113,9 @@ const AuthPanel = React.createClass({
                                 i => (<AuthItem key={ i.key } click={ () => this._selectItem(i.key) } item={i} />)
                             )
                         }
+                    </Box>
+                    <Box start flex style={{ paddingLeft: 20, borderLeft: "1px #E6E6E6 solid" }}>
+                        <AuthCreate name={title} create={this._create}/>
                     </Box>
                 </Box>
             </Box>

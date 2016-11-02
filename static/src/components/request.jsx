@@ -44,4 +44,13 @@ function MembersGet(callback) {
     xhr.get("members", handler(callback))
 }
 
-module.exports = { KVList, KVPut, KVDelete, KVGet, KVPost, MembersGet }
+function RolesAll(callback) {
+    xhr.get("roles", handler(callback))
+}
+
+function RolesPost(name, callback) {
+    let bodyStr = JSON.stringify({ name: name })
+    xhr.post("role", { body: bodyStr }, handler(callback))
+}
+
+module.exports = { KVList, KVPut, KVDelete, KVGet, KVPost, MembersGet, RolesAll, RolesPost }
