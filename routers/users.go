@@ -74,7 +74,7 @@ func grantUserRoleHandler(c *gin.Context, client *clientv3.Client) (interface{},
 	return nil, err
 }
 
-func revorkeUserRoleHandler(c *gin.Context, client *clientv3.Client) (interface{}, error) {
+func revokeUserRoleHandler(c *gin.Context, client *clientv3.Client) (interface{}, error) {
 	name := c.Param("name")
 	role := c.Param("role")
 

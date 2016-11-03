@@ -59,5 +59,5 @@ func InitRouters(g *gin.Engine, etcdClt *clientv3.Client, client *client.EtcdHRC
 	g.DELETE("/user/:name", resp(e3chGroup(etcdWrapper(deleteUserHandler))))
 	g.PUT("/user/:name/password", resp(e3chGroup(etcdWrapper(setUserPasswordHandler))))
 	g.PUT("/user/:name/role/:role", resp(e3chGroup(etcdWrapper(grantUserRoleHandler))))
-	g.DELETE("/user/:name/role/:role", resp(e3chGroup(etcdWrapper(revorkeUserRoleHandler))))
+	g.DELETE("/user/:name/role/:role", resp(e3chGroup(etcdWrapper(revokeUserRoleHandler))))
 }
