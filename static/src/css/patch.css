@@ -11,3 +11,10 @@
 .kv-create-button{
     padding: 15px 15px 12px 0px;
 }
+
+.ant-tag{
+    min-width: 80px;
+    height: 30px;
+    line-height: 26px;
+    font-size: 16px;
+}

@@ -76,12 +76,16 @@ function UsersGet(name, callback) {
 }
 
 function UsersGrantRole(name, role, callback) {
-    xhr.put("user/" + name + "/role" + role, null, handler(callback))
+    xhr.put("user/" + name + "/role/" + role, null, handler(callback))
+}
+
+function UsersRovokeRole(name, role, callback) {
+    xhr.del("user/" + name + "/role/" + role, null, handler(callback))
 }
 
 module.exports = {
     KVList, KVPut, KVDelete, KVGet, KVPost,
     MembersGet,
     RolesAll, RolesPost, RolesGet, RolesAddPerm,
-    UsersAll, UsersPost, UsersGet, UsersGrantRole
+    UsersAll, UsersPost, UsersGet, UsersGrantRole, UsersRovokeRole
 }
