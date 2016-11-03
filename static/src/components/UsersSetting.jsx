@@ -1,17 +1,14 @@
 import React from 'react'
 import { Box } from 'react-polymer-layout'
-import { UsersGet, User, UsersRovokeRole } from './request'
-import { Tag } from 'antd'
+import { UsersGet, User, UsersGrantRole, UsersRovokeRole, RolesAll } from './request'
+import { Tag, Select, Button } from 'antd'
 
+const Option = Select.Option
 const roleColors = ["blue", "green", "yellow", "red"]
-
-function pickOneColor() {
-    return roleColors[Math.floor(Math.random() * roleColors.length)]
-}
 
 const RoleItem = React.createClass({
     render() {
-        let color = pickOneColor()
+        let color = roleColors[(this.props.index || 0) % roleColors.length]
         return (
             <Box>
                 <Tag closable color={color} onClose={this.props.delete}>
@@ -33,8 +30,25 @@ const UsersSetting = React.createClass({
         }
     },
 
+    _getAllRolesDone(result) {
+        this.setState({ allRoles: result || [] })
+    },
+
+    _getAllRoles() {
+        RolesAll(this._getAllRolesDone)
+    },
+
+    _enter(props) {
+        this._getUser(props)
+        this._getAllRoles()
+    },
+
+    _refresh() {
+        this._getUser(this.props)
+    },
+
     _revokeRoleDone() {
-        _getUser(this.props)
+        _refresh()
     },
 
     _revokeRole(role) {
@@ -43,32 +57,62 @@ const UsersSetting = React.createClass({
         }
     },
 
+    _grantRoleDone(result) {
+        this._refresh()
+    },
+
+    _grantRole() {
+        if (this.props.name && this.state.selectedRole) {
+            UsersGrantRole(this.props.name, this.state.selectedRole, this._grantRoleDone)
+        }
+    },
+
+    _selectRole(value) {
+        this.setState({ selectedRole: value })
+    },
+
     componentDidMount() {
-        this._getUser(this.props)
+        this._enter(this.props)
     },
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.name !== this.props.name) {
-            this._getUser(nextProps)
+            this._enter(nextProps)
         }
     },
 
     getInitialState() {
-        return { name: "", roles: [] }
+        return { name: "", roles: [], allRoles: [], selectedRole: "" }
     },
 
     render() {
-        let boxStyle = { margin: 10, fontSize: 16, fontWeight: 700 }
+        let boxStyle = { padding: 10, fontSize: 16, fontWeight: 700 }
+        let moduleStyle = Object.assign({}, boxStyle, { borderTop: "1px solid #ddd" })
         return (
             <Box vertical >
                 <Box vertical style={boxStyle}>
                     ROLES
                     <Box wrap style={boxStyle}>
                         {
-                            this.state.roles.map(r => {
-                                return <RoleItem key={r} name={r} delete={() => this._revokeRole(r) }/>
+                            this.state.roles.map((r, index) => {
+                                return <RoleItem key={r} name={r} delete={() => this._revokeRole(r) } index={index}/>
                             })
                         }
+                    </Box>
+                </Box>
+                <Box vertical style={moduleStyle}>
+                    GRANT
+                    <Box justified style={boxStyle}>
+                        <Select style={{ width: 120 }} size="large" onChange={this._selectRole} value={this.state.selectedRole}>
+                            {
+                                this.state.allRoles.map(r => {
+                                    return <Option key={r} value={r}>{r}</Option>
+                                })
+                            }
+                        </Select>
+                        <Button size="large" type="primary" onClick={this._grantRole}>
+                            CONFIRM
+                        </Button>
                     </Box>
                 </Box>
             </Box>
