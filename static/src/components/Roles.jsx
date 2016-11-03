@@ -3,8 +3,6 @@ import AuthPanel from './AuthPanel'
 import { RolesAll, RolesPost } from './request'
 import RolesSetting from './RolesSetting'
 
-let roles = ["abc", "def"]
-
 const Roles = React.createClass({
     _getRolesDone(result) {
         this.setState({ roles: result || [] })
