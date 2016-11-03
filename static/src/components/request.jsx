@@ -18,43 +18,55 @@ function handler(callback) {
     }
 }
 
+function withAuth(options){
+    return Object.assign(
+        options || {},
+        {
+            "headers":{
+                "X-Etcd-Username":localStorage.etcdUsername,
+                "X-Etcd-Password":localStorage.etcdPassword
+            }
+        }
+    )
+}
+
 function KVList(path, callback) {
-    xhr.get("kv" + path + "?list", handler(callback))
+    xhr.get("kv" + path + "?list", withAuth(), handler(callback))
 }
 
 function KVGet(path, callback) {
-    xhr.get("kv" + path, handler(callback))
+    xhr.get("kv" + path, withAuth(), handler(callback))
 }
 
 function KVPost(path, value, callback) {
     let bodyStr = JSON.stringify({ value: value })
-    xhr.post("kv" + path, { body: bodyStr }, handler(callback))
+    xhr.post("kv" + path,  withAuth({ body: bodyStr} ), handler(callback))
 }
 
 function KVPut(path, value, callback) {
     let bodyStr = JSON.stringify({ value: value })
-    xhr.put("kv" + path, { body: bodyStr }, handler(callback))
+    xhr.put("kv" + path, withAuth({ body: bodyStr }), handler(callback))
 }
 
 function KVDelete(path, callback) {
-    xhr.del("kv" + path, null, handler(callback))
+    xhr.del("kv" + path, withAuth(), handler(callback))
 }
 
 function MembersGet(callback) {
-    xhr.get("members", handler(callback))
+    xhr.get("members",withAuth(), handler(callback))
 }
 
 function RolesAll(callback) {
-    xhr.get("roles", handler(callback))
+    xhr.get("roles", withAuth(), handler(callback))
 }
 
 function RolesPost(name, callback) {
     let bodyStr = JSON.stringify({ name: name })
-    xhr.post("role", { body: bodyStr }, handler(callback))
+    xhr.post("role", withAuth({ body: bodyStr }), handler(callback))
 }
 
 function RolesGet(name, callback) {
-    xhr.get("role/" + name, handler(callback))
+    xhr.get("role/" + name, withAuth(), handler(callback))
 }
 
 function RolesDelete(name, callback) {
@@ -63,33 +75,33 @@ function RolesDelete(name, callback) {
 
 function RolesAddPerm(name, permType, key, rangeEnd, prefix, callback) {
     let bodyStr = JSON.stringify({ perm_type: permType, key: key, range_end: rangeEnd })
-    xhr.post("role/" + name + "/permission" + (prefix ? "?prefix" : ""), { body: bodyStr }, handler(callback))
+    xhr.post("role/" + name + "/permission" + (prefix ? "?prefix" : ""), withAuth({ body: bodyStr }), handler(callback))
 }
 
 function UsersAll(callback) {
-    xhr.get("users", handler(callback))
+    xhr.get("users", withAuth(), handler(callback))
 }
 
 function UsersPost(name, callback) {
     let bodyStr = JSON.stringify({ name: name })
-    xhr.post("user", { body: bodyStr }, handler(callback))
+    xhr.post("user", withAuth({ body: bodyStr }), handler(callback))
 }
 
 function UsersGet(name, callback) {
-    xhr.get("user/" + name, handler(callback))
+    xhr.get("user/" + name, withAuth(), handler(callback))
 }
 
 function UsersGrantRole(name, role, callback) {
-    xhr.put("user/" + name + "/role/" + role, null, handler(callback))
+    xhr.put("user/" + name + "/role/" + role, withAuth(), handler(callback))
 }
 
 function UsersRovokeRole(name, role, callback) {
-    xhr.del("user/" + name + "/role/" + role, null, handler(callback))
+    xhr.del("user/" + name + "/role/" + role, withAuth(), handler(callback))
 }
 
 function UsersChangePassword(name, password, callback) {
     let bodyStr = JSON.stringify({ password: password })
-    xhr.put("/user/" + name + "/password", { body: bodyStr }, handler(callback))
+    xhr.put("/user/" + name + "/password", withAuth({ body: bodyStr }), handler(callback))
 }
 
 module.exports = {
