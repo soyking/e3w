@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box } from 'react-polymer-layout'
-import { RolesGet, RolesAddPerm } from './request'
-import { Radio, Input, Button, Tooltip } from 'antd'
+import { RolesGet, RolesAddPerm, RolesDeletePerm } from './request'
+import { Radio, Input, Button, Tooltip, Icon } from 'antd'
 
 const RadioButton = Radio.Button
 const RadioGroup = Radio.Group
@@ -24,24 +24,29 @@ const PermItem = React.createClass({
                 break
         }
         return (
-            <Box style={{
-                width: "100%", height: 40,
-                borderStyle: "solid", borderWidth: 2, borderColor: "#ddd", borderRadius: 8,
-                fontWeight: 700, fontSize: 16
-            }}>
-                <Box center centerJustified style={{ backgroundColor: typeColor, height: "100%", width: 120, borderRadius: "6px 0px 0px 6px" }}>
-                    {perm.perm_type}
+            <Box center>
+                <Box flex style={{
+                    height: 40,
+                    borderStyle: "solid", borderWidth: 2, borderColor: "#ddd", borderRadius: 8,
+                    fontWeight: 700, fontSize: 16
+                }}>
+                    <Box center centerJustified style={{ backgroundColor: typeColor, height: "100%", width: 120, borderRadius: "6px 0px 0px 6px" }}>
+                        {perm.perm_type}
+                    </Box>
+                    <Tooltip title="KEY">
+                        <Box center centerJustified flex style={{ borderRight: "1px solid #ddd" }}>
+                            {perm.key}
+                        </Box>
+                    </Tooltip>
+                    <Tooltip title="RANGE END">
+                        <Box center centerJustified flex>
+                            {perm.range_end}
+                        </Box>
+                    </Tooltip>
                 </Box>
-                <Tooltip title="KEY">
-                    <Box center centerJustified flex style={{ borderRight: "1px solid #ddd" }}>
-                        {perm.key}
-                    </Box>
-                </Tooltip>
-                <Tooltip title="RANGE END">
-                    <Box center centerJustified flex>
-                        {perm.range_end}
-                    </Box>
-                </Tooltip>
+                <Box center centerJustified style={{
+                    color: "red", width: 40, fontSize: 20, cursor: "pointer"
+                }} onClick={this.props.delete}><Icon type="lock" /></Box>
             </Box>
         )
     }
@@ -75,6 +80,14 @@ const RolesSetting = React.createClass({
         RolesAddPerm(this.props.name, state.permType, state.key, state.rangeEnd, state.keyType === "PREFIX", this._addPermDone)
     },
 
+    _deletePermDone() {
+        this._getRole(this.props)
+    },
+
+    _deletePerm(p) {
+        RolesDeletePerm(this.props.name, p.key, p.range_end, this._deletePermDone)
+    },
+
     componentDidMount() {
         this._getRole(this.props)
     },
@@ -97,30 +110,30 @@ const RolesSetting = React.createClass({
             <Box vertical >
                 <Box vertical style={{ padding: 10, width: "100%" }}>
                     {this.state.perms.map(p => {
-                        return <div style={radioStyle} key={Math.random()}> <PermItem perm={p} /></div>
-                    })}
+                        return <div style={radioStyle} key={Math.random() }> <PermItem perm={p} delete={() => { this._deletePerm(p) } }/></div>
+                    }) }
                 </Box>
                 <Box style={{ borderTop: "1px solid #ddd", fontWeight: 700, fontSize: 16 }}>
                     <Box vertical style={{ margin: 12, width: "100%" }}>
                         <Box style={radioStyle}>
                             <Box center style={typeStyle}>Perm Type</Box>
                             <RadioGroup onChange={this._selectPermType} defaultValue={PermTypes[0]}>
-                                {PermTypes.map(t => { return (<RadioButton key={t} size="large" value={t}>{t}</RadioButton>) })}
+                                {PermTypes.map(t => { return (<RadioButton key={t} size="large" value={t}>{t}</RadioButton>) }) }
                             </RadioGroup>
                         </Box>
                         <Box style={radioStyle}>
                             <div style={typeStyle}>Key Type</div>
                             <RadioGroup onChange={this._selectKeyType} defaultValue={KeyTypes[0]}>
-                                {KeyTypes.map(t => { return (<RadioButton key={t} size="large" value={t}>{t}</RadioButton>) })}
+                                {KeyTypes.map(t => { return (<RadioButton key={t} size="large" value={t}>{t}</RadioButton>) }) }
                             </RadioGroup>
                         </Box>
                         <Box style={radioStyle} >
                             <Box center style={typeStyle}>Key</Box>
-                            <Input size="large" key="key" value={this.state.key} onChange={e => this.setState({ key: e.target.value })} />
+                            <Input size="large" key="key" value={this.state.key} onChange={e => this.setState({ key: e.target.value }) } />
                         </Box>
                         <Box style={radioStyle}>
                             <Box center style={typeStyle}>RangeEnd</Box>
-                            <Input size="large" key="rangeEnd" value={this.state.rangeEnd} onChange={e => this.setState({ rangeEnd: e.target.value })} />
+                            <Input size="large" key="rangeEnd" value={this.state.rangeEnd} onChange={e => this.setState({ rangeEnd: e.target.value }) } />
                         </Box>
                         <Box endJustified style={radioStyle} >
                             <Button type="primary" size="large" onClick={this._addPerm} disabled={cantClick} >
