@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box } from 'react-polymer-layout'
-import { UsersGet, User, UsersGrantRole, UsersRovokeRole, RolesAll } from './request'
-import { Tag, Select, Button } from 'antd'
+import { UsersGet, User, UsersGrantRole, UsersRovokeRole, UsersChangePassword, RolesAll } from './request'
+import { Tag, Select, Button, Input } from 'antd'
 
 const Option = Select.Option
 const roleColors = ["blue", "green", "yellow", "red"]
@@ -41,6 +41,7 @@ const UsersSetting = React.createClass({
     _enter(props) {
         this._getUser(props)
         this._getAllRoles()
+        this.setState({ selectedRole: "", password: "" })
     },
 
     _refresh() {
@@ -71,6 +72,10 @@ const UsersSetting = React.createClass({
         this.setState({ selectedRole: value })
     },
 
+    _changePassword() {
+        UsersChangePassword(this.props.name, this.state.password, () => { })
+    },
+
     componentDidMount() {
         this._enter(this.props)
     },
@@ -82,7 +87,7 @@ const UsersSetting = React.createClass({
     },
 
     getInitialState() {
-        return { name: "", roles: [], allRoles: [], selectedRole: "" }
+        return { roles: [], allRoles: [], selectedRole: "", password: "" }
     },
 
     render() {
@@ -111,6 +116,17 @@ const UsersSetting = React.createClass({
                             }
                         </Select>
                         <Button size="large" type="primary" onClick={this._grantRole}>
+                            CONFIRM
+                        </Button>
+                    </Box>
+                </Box>
+                <Box vertical style={moduleStyle}>
+                    CHANGE PASSWORD
+                    <Box justified style={boxStyle}>
+                        <Input type="password" size="large" placeholder="New Password" value={this.state.password} onChange={
+                            e => { this.setState({ password: e.target.value }) }
+                        } />
+                        <Button size="large" type="primary" onClick={this._changePassword}>
                             CONFIRM
                         </Button>
                     </Box>

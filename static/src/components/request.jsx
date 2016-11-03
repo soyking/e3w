@@ -83,9 +83,14 @@ function UsersRovokeRole(name, role, callback) {
     xhr.del("user/" + name + "/role/" + role, null, handler(callback))
 }
 
+function UsersChangePassword(name, password, callback) {
+    let bodyStr = JSON.stringify({ password: password })
+    xhr.put("/user/" + name + "/password", { body: bodyStr }, handler(callback))
+}
+
 module.exports = {
     KVList, KVPut, KVDelete, KVGet, KVPost,
     MembersGet,
     RolesAll, RolesPost, RolesGet, RolesAddPerm,
-    UsersAll, UsersPost, UsersGet, UsersGrantRole, UsersRovokeRole
+    UsersAll, UsersPost, UsersGet, UsersGrantRole, UsersRovokeRole, UsersChangePassword
 }
