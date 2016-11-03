@@ -1,6 +1,6 @@
 import React from 'react'
 import AuthPanel from './AuthPanel'
-import { UsersAll, UsersPost } from './request'
+import { UsersAll, UsersPost, UsersDelete } from './request'
 import UsersSetting from './UsersSetting'
 
 const Users = React.createClass({
@@ -12,12 +12,20 @@ const Users = React.createClass({
         UsersAll(this._getUsersDone)
     },
 
-    _createDone(result) {
+    _createUserDone(result) {
         this._getUsers()
     },
 
-    _create(name) {
-        UsersPost(name, this._createDone)
+    _createUser(name) {
+        UsersPost(name, this._createUserDone)
+    },
+
+    _deleteUserDone(result) {
+        this._getUsers()
+    },
+
+    _deleteUser(name) {
+        UsersDelete(name, this._deleteUserDone)
     },
 
     componentDidMount() {
@@ -38,7 +46,7 @@ const Users = React.createClass({
 
     render() {
         return (
-            <AuthPanel title="USERS" items={this.state.users} create={this._create} setting={this._setting}/>
+            <AuthPanel title="USERS" items={this.state.users} create={this._createUser} setting={this._setting} delete={this._deleteUser}/>
         )
     }
 })

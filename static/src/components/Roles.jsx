@@ -12,20 +12,20 @@ const Roles = React.createClass({
         RolesAll(this._getRolesDone)
     },
 
-    _createDone(result) {
+    _createRoleDone(result) {
         this._getRoles()
     },
 
-    _create(name) {
-        RolesPost(name, this._createDone)
+    _createRole(name) {
+        RolesPost(name, this._createRoleDone)
     },
 
-    _deleteDone(result) {
+    _deleteRoleDone(result) {
         this._getRoles()
     },
 
-    _delete(name) {
-        RolesDelete(name, this._deleteDone)
+    _deleteRole(name) {
+        RolesDelete(name, this._deleteRoleDone)
     },
 
     componentDidMount() {
@@ -46,7 +46,7 @@ const Roles = React.createClass({
 
     render() {
         return (
-            <AuthPanel title="ROLES" items={this.state.roles} create={this._create} setting={this._setting} delete={this._delete} />
+            <AuthPanel title="ROLES" items={this.state.roles} create={this._createRole} setting={this._setting} delete={this._deleteRole} />
         )
     }
 })

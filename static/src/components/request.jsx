@@ -18,13 +18,13 @@ function handler(callback) {
     }
 }
 
-function withAuth(options){
+function withAuth(options) {
     return Object.assign(
         options || {},
         {
-            "headers":{
-                "X-Etcd-Username":localStorage.etcdUsername,
-                "X-Etcd-Password":localStorage.etcdPassword
+            "headers": {
+                "X-Etcd-Username": localStorage.etcdUsername,
+                "X-Etcd-Password": localStorage.etcdPassword
             }
         }
     )
@@ -40,7 +40,7 @@ function KVGet(path, callback) {
 
 function KVPost(path, value, callback) {
     let bodyStr = JSON.stringify({ value: value })
-    xhr.post("kv" + path,  withAuth({ body: bodyStr} ), handler(callback))
+    xhr.post("kv" + path, withAuth({ body: bodyStr }), handler(callback))
 }
 
 function KVPut(path, value, callback) {
@@ -53,7 +53,7 @@ function KVDelete(path, callback) {
 }
 
 function MembersGet(callback) {
-    xhr.get("members",withAuth(), handler(callback))
+    xhr.get("members", withAuth(), handler(callback))
 }
 
 function RolesAll(callback) {
@@ -91,6 +91,10 @@ function UsersGet(name, callback) {
     xhr.get("user/" + name, withAuth(), handler(callback))
 }
 
+function UsersDelete(name, callback) {
+    xhr.del("user/" + name, withAuth(), handler(callback))
+}
+
 function UsersGrantRole(name, role, callback) {
     xhr.put("user/" + name + "/role/" + role, withAuth(), handler(callback))
 }
@@ -101,12 +105,12 @@ function UsersRovokeRole(name, role, callback) {
 
 function UsersChangePassword(name, password, callback) {
     let bodyStr = JSON.stringify({ password: password })
-    xhr.put("/user/" + name + "/password", withAuth({ body: bodyStr }), handler(callback))
+    xhr.put("user/" + name + "/password", withAuth({ body: bodyStr }), handler(callback))
 }
 
 module.exports = {
     KVList, KVPut, KVDelete, KVGet, KVPost,
     MembersGet,
-    RolesAll, RolesPost, RolesGet, RolesAddPerm,RolesDelete,
-    UsersAll, UsersPost, UsersGet, UsersGrantRole, UsersRovokeRole, UsersChangePassword
+    RolesAll, RolesPost, RolesGet, RolesAddPerm, RolesDelete,
+    UsersAll, UsersPost, UsersGet, UsersDelete, UsersGrantRole, UsersRovokeRole, UsersChangePassword
 }
