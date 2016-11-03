@@ -81,7 +81,7 @@ const Members = React.createClass({
     render() {
         return (
             <Box centerJustified>
-                <Box vertical style={{ width: 800 }}>
+                <Box vertical style={{ width: 780 }}>
                     {
                         this.state.members.map(m => {
                             return <Member key={m.ID} member={m} />

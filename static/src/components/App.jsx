@@ -63,6 +63,9 @@ const App = React.createClass({
                                 <Menu.Item key="roles">ROLES</Menu.Item>
                                 <Menu.Item key="users">USERS</Menu.Item>
                             </Menu.SubMenu>
+                            <Menu.Item key="setting">
+                                <Icon type="setting" /><span>SETTING</span>
+                            </Menu.Item>
                         </Menu>
                     </Box>
                     <div style={{ paddingTop: 20 }}>

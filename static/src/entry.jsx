@@ -6,6 +6,7 @@ import KeyValue from './components/KeyValue'
 import Members from './components/Members'
 import Roles from './components/Roles'
 import Users from './components/Users'
+import Setting from "./components/Setting"
 import 'antd/dist/antd.min.css'
 import './css/patch.css'
 
@@ -18,6 +19,7 @@ ReactDOM.render((
             <Route path="members" component={Members} />
             <Route path="roles" component={Roles} />
             <Route path="users" component={Users} />
+            <Route path="setting" component={Setting} />
         </Route>
     </Router>
 ), document.querySelector(".root"))
