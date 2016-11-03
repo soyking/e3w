@@ -6,6 +6,7 @@ import (
 
 type Config struct {
 	Port          string
+	Auth          bool
 	EtcdRootKey   string
 	EtcdEndPoints []string
 	EtcdUsername  string
@@ -22,6 +23,7 @@ func Init(filepath string) (*Config, error) {
 
 	appSec := cfg.Section("app")
 	c.Port = appSec.Key("port").Value()
+	c.Auth = appSec.Key("auth").MustBool()
 
 	etcdSec := cfg.Section("etcd")
 	c.EtcdRootKey = etcdSec.Key("root_key").Value()

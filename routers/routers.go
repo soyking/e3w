@@ -4,17 +4,33 @@ import (
 	"github.com/coreos/etcd/clientv3"
 	"github.com/gin-gonic/gin"
 	"github.com/soyking/e3ch"
+	"github.com/soyking/e3w/conf"
+	"github.com/soyking/e3w/e3ch"
+)
+
+const (
+	ETCD_USERNAME_HEADER = "X-Etcd-Username"
+	ETCD_PASSWORD_HEADER = "X-Etcd-Password"
 )
 
 type e3chHandler func(*gin.Context, *client.EtcdHRCHYClient) (interface{}, error)
 
 type groupHandler func(e3chHandler) respHandler
 
-func withE3chGroup(e3chClt *client.EtcdHRCHYClient) groupHandler {
+func withE3chGroup(e3chClt *client.EtcdHRCHYClient, config *conf.Config) groupHandler {
 	return func(h e3chHandler) respHandler {
 		return func(c *gin.Context) (interface{}, error) {
-			// TODO: make new client
-			return h(c, e3chClt)
+			clt := e3chClt
+			if config.Auth {
+				var err error
+				username := c.Request.Header.Get(ETCD_USERNAME_HEADER)
+				password := c.Request.Header.Get(ETCD_PASSWORD_HEADER)
+				clt, err = e3ch.CloneE3chClient(username, password, e3chClt)
+				if err != nil {
+					return nil, err
+				}
+			}
+			return h(c, clt)
 		}
 	}
 }
@@ -27,13 +43,13 @@ func etcdWrapper(h etcdHandler) e3chHandler {
 	}
 }
 
-func InitRouters(g *gin.Engine, etcdClt *clientv3.Client, client *client.EtcdHRCHYClient) {
+func InitRouters(g *gin.Engine, config *conf.Config, e3chClt *client.EtcdHRCHYClient) {
 	g.GET("/", func(c *gin.Context) {
 		c.File("./static/dist/index.html")
 	})
 	g.Static("/public", "./static/dist")
 
-	e3chGroup := withE3chGroup(client)
+	e3chGroup := withE3chGroup(e3chClt, config)
 
 	// key/value actions
 	g.GET("/kv/*key", resp(e3chGroup(getKeyHandler)))
