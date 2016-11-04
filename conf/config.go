@@ -8,6 +8,7 @@ type Config struct {
 	Port          string
 	Auth          bool
 	EtcdRootKey   string
+	DirValue      string
 	EtcdEndPoints []string
 	EtcdUsername  string
 	EtcdPassword  string
@@ -27,6 +28,7 @@ func Init(filepath string) (*Config, error) {
 
 	etcdSec := cfg.Section("etcd")
 	c.EtcdRootKey = etcdSec.Key("root_key").Value()
+	c.DirValue = etcdSec.Key("dir_value").Value()
 	c.EtcdEndPoints = etcdSec.Key("addr").Strings(",")
 	c.EtcdUsername = etcdSec.Key("username").Value()
 	c.EtcdPassword = etcdSec.Key("password").Value()

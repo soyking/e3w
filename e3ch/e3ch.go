@@ -16,7 +16,7 @@ func NewE3chClient(config *conf.Config) (*client.EtcdHRCHYClient, error) {
 		return nil, err
 	}
 
-	client, err := client.New(clt, config.EtcdRootKey)
+	client, err := client.New(clt, config.EtcdRootKey, config.DirValue)
 	if err != nil {
 		return nil, err
 	}
