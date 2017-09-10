@@ -29,22 +29,28 @@ SETTING
 
 ## Usage
 
-```
-go get github.com/soyking/e3w
+1.Fetch the project `go get github.com/soyking/e3w`
 
-# frontend
+
+2.frontend
+
+```
 cd static
 npm install
 npm run publish
+```
 
-# backend
-# start etcd, such as [goreman](https://github.com/coreos/etcd/#running-a-local-etcd-cluster)
-# install packages by [dep](https://github.com/golang/dep) if needed
-dep ensure
-# edit conf/config.default.ini
-go build && ./e3w
+3.backend
 
-# for auth
+a. Start etcd, such as [goreman](https://github.com/coreos/etcd/#running-a-local-etcd-cluster)
+
+b. Install packages by [dep](https://github.com/golang/dep) if needed, `dep ensure`
+
+c. Edit conf/config.default.ini if needed, `go build && ./e3w`
+
+d. For auth:
+
+```
 ETCDCTL_API=3 etcdctl auth enable
 # edit conf/config.default.ini[app]#auth
 ./e3w
@@ -64,3 +70,5 @@ ETCDCTL_API=3 etcdctl auth enable
 	```
 
 	When `userA` was granted `roleA`, `userA` could open the by `http://e3w-address.com/#/kv/dir1/dir2` to view and edit the key/value
+
+- Access key/value by etcdctl, [issue](https://github.com/soyking/e3w/issues/3)
