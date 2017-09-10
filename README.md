@@ -38,7 +38,9 @@ npm install
 npm run publish
 
 # backend
-# start etcd
+# start etcd, such as [goreman](https://github.com/coreos/etcd/#running-a-local-etcd-cluster)
+# install packages by [dep](https://github.com/golang/dep) if needed
+dep ensure
 # edit conf/config.default.ini
 go build && ./e3w
 

@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/coreos/etcd/version"
 	"github.com/gin-gonic/gin"
-	"github.com/soyking/e3ch"
 	"github.com/soyking/e3w/conf"
 	"github.com/soyking/e3w/e3ch"
 	"github.com/soyking/e3w/routers"
@@ -13,7 +13,7 @@ import (
 
 const (
 	PROGRAM_NAME    = "e3w"
-	PROGRAM_VERSION = "0.0.1"
+	PROGRAM_VERSION = "0.0.2"
 )
 
 var configFilepath string
@@ -24,11 +24,9 @@ func init() {
 	flag.Parse()
 
 	if *rev {
-		fmt.Printf("[%s v%s]\n[etcd %s # %s:%s]\n",
+		fmt.Printf("[%s v%s]\n[etcd %s]\n",
 			PROGRAM_NAME, PROGRAM_VERSION,
-			client.ETCD_VERSION,
-			client.ETCD_BRANCH,
-			client.ETCD_LAST_COMMIT,
+			version.Version,
 		)
 		os.Exit(0)
 	}
