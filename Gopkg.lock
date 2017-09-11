@@ -71,6 +71,7 @@
   name = "google.golang.org/grpc"
   packages = [".","codes","credentials","grpclog","internal","keepalive","metadata","naming","peer","stats","tap","transport"]
   revision = "8050b9cbc271307e5a716a9d782803d09b0d6f2d"
+  version = "v1.2.1"
 
 [[projects]]
   name = "gopkg.in/go-playground/validator.v8"
@@ -93,6 +94,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "df99fd2f62a5de328e2ff1b65a2cb0c8f196e9ba424c3d496a7262484e574126"
+  inputs-digest = "a5e4007cd9aad24de914d1900d22c9b372a00bcca68ed4a5af0b2997154193b0"
   solver-name = "gps-cdcl"
   solver-version = 1
