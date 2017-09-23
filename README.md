@@ -71,4 +71,4 @@ ETCDCTL_API=3 etcdctl auth enable
 
 	When `userA` was granted `roleA`, `userA` could open the by `http://e3w-address.com/#/kv/dir1/dir2` to view and edit the key/value
 
-- Access key/value by etcdctl, [issue](https://github.com/soyking/e3w/issues/3)
+- Access key/value by etcdctl, [issue](https://github.com/soyking/e3w/issues/3). But the best way to access key/value is using [e3ch](https://github.com/soyking/e3ch).
