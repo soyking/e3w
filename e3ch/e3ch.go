@@ -33,7 +33,6 @@ func NewE3chClient(config *conf.Config) (*client.EtcdHRCHYClient, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	return client, client.FormatRootKey()
 }
 
