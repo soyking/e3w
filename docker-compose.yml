@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  etcd:
+    image: soyking/etcd-goreman:3.2.7
+    environment:
+      - CLIENT_ADDR=etcd
+  e3w:
+    image: soyking/e3w:latest
+    volumes:
+      - ./conf/config.default.ini:/app/conf/config.default.ini
+    ports:
+      - "8080:8080"
+    depends_on:
+      - etcd
