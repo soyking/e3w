@@ -5,6 +5,17 @@ etcd v3 Web UI based on [Golang](https://golang.org/) && [React](https://faceboo
 
 supporting hierarchy on etcd v3, based on [e3ch](https://github.com/soyking/e3ch)
 
+## Quick Start
+
+```
+git clone https://github.com/soyking/e3w.git
+cd e3w
+docker-compose up
+# open http://localhost:8080
+```
+
+Or use docker image by `docker pull soyking/e3w`, more details in `Dockerfile` and `docker-compose.yml`
+
 ## Overview
 
 KEY/VALUE
@@ -56,6 +67,10 @@ ETCDCTL_API=3 etcdctl auth enable
 ./e3w
 # you could set your username and password in SETTING page
 ```
+
+4.build image
+
+Install dependencies in 3.b, then run `docker build -t soyking/e3w .`
 
 ## Notice
 
