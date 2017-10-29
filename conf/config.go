@@ -12,6 +12,9 @@ type Config struct {
 	EtcdEndPoints []string
 	EtcdUsername  string
 	EtcdPassword  string
+	CertFile      string
+	KeyFile       string
+	CAFile        string
 }
 
 func Init(filepath string) (*Config, error) {
@@ -32,6 +35,9 @@ func Init(filepath string) (*Config, error) {
 	c.EtcdEndPoints = etcdSec.Key("addr").Strings(",")
 	c.EtcdUsername = etcdSec.Key("username").Value()
 	c.EtcdPassword = etcdSec.Key("password").Value()
+	c.CertFile = etcdSec.Key("cert_file").Value()
+	c.KeyFile = etcdSec.Key("key_file").Value()
+	c.CAFile = etcdSec.Key("ca_file").Value()
 
 	return c, nil
 }
