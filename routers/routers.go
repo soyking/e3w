@@ -29,6 +29,7 @@ func withE3chGroup(e3chClt *client.EtcdHRCHYClient, config *conf.Config) groupHa
 				if err != nil {
 					return nil, err
 				}
+				defer clt.EtcdClient().Close()
 			}
 			return h(c, clt)
 		}
