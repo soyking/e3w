@@ -70,7 +70,7 @@ function RolesGet(name, callback) {
 }
 
 function RolesDelete(name, callback) {
-    xhr.del("role/" + name, handler(callback))
+    xhr.del("role/" + name, withAuth(), handler(callback))
 }
 
 function RolesAddPerm(name, permType, key, rangeEnd, prefix, callback) {
