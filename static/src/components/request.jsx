@@ -66,21 +66,21 @@ function RolesPost(name, callback) {
 }
 
 function RolesGet(name, callback) {
-    xhr.get("role/" + name, withAuth(), handler(callback))
+    xhr.get("role/" + encodeURIComponent(name), withAuth(), handler(callback))
 }
 
 function RolesDelete(name, callback) {
-    xhr.del("role/" + name, withAuth(), handler(callback))
+    xhr.del("role/" + encodeURIComponent(name), withAuth(), handler(callback))
 }
 
 function RolesAddPerm(name, permType, key, rangeEnd, prefix, callback) {
     let bodyStr = JSON.stringify({ perm_type: permType, key: key, range_end: rangeEnd })
-    xhr.post("role/" + name + "/permission" + (prefix ? "?prefix" : ""), withAuth({ body: bodyStr }), handler(callback))
+    xhr.post("role/" + encodeURIComponent(name) + "/permission" + (prefix ? "?prefix" : ""), withAuth({ body: bodyStr }), handler(callback))
 }
 
 function RolesDeletePerm(name, key, rangeEnd, callback) {
     let bodyStr = JSON.stringify({ key: key, range_end: rangeEnd })
-    xhr.del("role/" + name + "/permission", withAuth({ body: bodyStr }), handler(callback))
+    xhr.del("role/" + encodeURIComponent(name) + "/permission", withAuth({ body: bodyStr }), handler(callback))
 }
 
 function UsersAll(callback) {
@@ -93,24 +93,24 @@ function UsersPost(name, callback) {
 }
 
 function UsersGet(name, callback) {
-    xhr.get("user/" + name, withAuth(), handler(callback))
+    xhr.get("user/" + encodeURIComponent(name), withAuth(), handler(callback))
 }
 
 function UsersDelete(name, callback) {
-    xhr.del("user/" + name, withAuth(), handler(callback))
+    xhr.del("user/" + encodeURIComponent(name), withAuth(), handler(callback))
 }
 
 function UsersGrantRole(name, role, callback) {
-    xhr.put("user/" + name + "/role/" + role, withAuth(), handler(callback))
+    xhr.put("user/" + encodeURIComponent(name) + "/role/" + encodeURIComponent(role), withAuth(), handler(callback))
 }
 
 function UsersRovokeRole(name, role, callback) {
-    xhr.del("user/" + name + "/role/" + role, withAuth(), handler(callback))
+    xhr.del("user/" + encodeURIComponent(name) + "/role/" + encodeURIComponent(role), withAuth(), handler(callback))
 }
 
 function UsersChangePassword(name, password, callback) {
     let bodyStr = JSON.stringify({ password: password })
-    xhr.put("user/" + name + "/password", withAuth({ body: bodyStr }), handler(callback))
+    xhr.put("user/" + encodeURIComponent(name) + "/password", withAuth({ body: bodyStr }), handler(callback))
 }
 
 module.exports = {
