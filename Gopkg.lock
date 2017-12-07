@@ -40,8 +40,8 @@
 [[projects]]
   name = "github.com/soyking/e3ch"
   packages = ["."]
-  revision = "554492e6ce6ed73e1f471f26c5a7dfa0858eb11a"
-  version = "v1.0.0"
+  revision = "04eed13042a216c0e7953d180a954141e81d5f53"
+  version = "v1.0.1"
 
 [[projects]]
   branch = "master"
@@ -100,6 +100,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "16088b14d6a33d8dc2ed1f2e13b23e11bee091febd1ef83bdb4545458b4ed3ed"
+  inputs-digest = "ecaa2664a430f5aa5bc6e5800684e2d1a81bc928e6c684da03ebfbcc7b7978b7"
   solver-name = "gps-cdcl"
   solver-version = 1
