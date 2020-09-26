@@ -3,11 +3,11 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/coreos/etcd/version"
 	"github.com/gin-gonic/gin"
 	"github.com/soyking/e3w/conf"
 	"github.com/soyking/e3w/e3ch"
 	"github.com/soyking/e3w/routers"
+	"go.etcd.io/etcd/version"
 	"os"
 )
 

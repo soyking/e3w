@@ -1,10 +1,10 @@
 package routers
 
 import (
-	"github.com/coreos/etcd/auth/authpb"
-	"github.com/coreos/etcd/clientv3"
 	"github.com/gin-gonic/gin"
 	"github.com/soyking/e3ch"
+	"go.etcd.io/etcd/auth/authpb"
+	"go.etcd.io/etcd/clientv3"
 )
 
 func getRolesHandler(c *gin.Context, client *clientv3.Client) (interface{}, error) {

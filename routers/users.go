@@ -1,8 +1,8 @@
 package routers
 
 import (
-	"github.com/coreos/etcd/clientv3"
 	"github.com/gin-gonic/gin"
+	"go.etcd.io/etcd/clientv3"
 )
 
 func getUsersHandler(c *gin.Context, client *clientv3.Client) (interface{}, error) {
