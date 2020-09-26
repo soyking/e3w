@@ -1,11 +1,11 @@
 package routers
 
 import (
-	"github.com/coreos/etcd/clientv3"
 	"github.com/gin-gonic/gin"
 	"github.com/soyking/e3ch"
 	"github.com/soyking/e3w/conf"
 	"github.com/soyking/e3w/e3ch"
+	"go.etcd.io/etcd/clientv3"
 )
 
 const (

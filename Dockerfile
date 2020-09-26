@@ -1,8 +1,9 @@
-FROM golang:1.8 as backend
+# docker build -t soyking/e3w .
+FROM golang:1.14 as backend
 RUN mkdir -p /go/src/github.com/soyking/e3w
 ADD . /go/src/github.com/soyking/e3w
 WORKDIR /go/src/github.com/soyking/e3w
-RUN CGO_ENABLED=0 go build
+RUN CGO_ENABLED=0 GOPROXY=https://goproxy.io go build
 
 FROM node:8 as frontend
 RUN mkdir /app
