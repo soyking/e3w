@@ -9,7 +9,7 @@ FROM node:8 as frontend
 RUN mkdir /app
 ADD static /app
 WORKDIR /app
-RUN npm --registry=https://registry.npm.taobao.org \
+RUN npm --registry=https://registry.npmmirror.com \
 --cache=$HOME/.npm/.cache/cnpm \
 --disturl=https://npm.taobao.org/mirrors/node \
 --userconfig=$HOME/.cnpmrc install && npm run publish
