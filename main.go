@@ -3,12 +3,13 @@ package main
 import (
 	"flag"
 	"fmt"
+	"os"
+
 	"github.com/gin-gonic/gin"
 	"github.com/soyking/e3w/conf"
 	"github.com/soyking/e3w/e3ch"
 	"github.com/soyking/e3w/routers"
-	"go.etcd.io/etcd/version"
-	"os"
+	"go.etcd.io/etcd/api/v3/version"
 )
 
 const (
