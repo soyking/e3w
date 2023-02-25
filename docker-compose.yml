@@ -6,7 +6,7 @@ services:
     environment:
       - CLIENT_ADDR=etcd
   e3w:
-    image: soyking/e3w:latest
+    image: soyking/e3w:master
     volumes:
       - ./conf/config.default.ini:/app/conf/config.default.ini
     ports:
