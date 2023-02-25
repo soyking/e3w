@@ -55,11 +55,9 @@ npm run publish
 
 a. Start etcd, such as [goreman](https://github.com/coreos/etcd/#running-a-local-etcd-cluster)
 
-b. Install packages by [dep](https://github.com/golang/dep) if needed, `dep ensure`
+b. Edit conf/config.default.ini if needed, `go build && ./e3w`
 
-c. Edit conf/config.default.ini if needed, `go build && ./e3w`
-
-d. For auth:
+c. For auth:
 
 ```
 ETCDCTL_API=3 etcdctl auth enable
