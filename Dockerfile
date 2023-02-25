@@ -1,5 +1,5 @@
 # docker build -t soyking/e3w .
-FROM golang:1.14 as backend
+FROM golang:1.17 as backend
 RUN mkdir -p /e3w
 ADD . /e3w
 WORKDIR /e3w
