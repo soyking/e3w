@@ -47,5 +47,7 @@ func main() {
 	router := gin.Default()
 	router.UseRawPath = true
 	routers.InitRouters(router, config, client)
-	router.Run(":" + config.Port)
+	if err := router.Run(":" + config.Port); err != nil {
+		panic(err)
+	}
 }

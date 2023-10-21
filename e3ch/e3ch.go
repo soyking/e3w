@@ -14,9 +14,10 @@ func NewE3chClient(config *conf.Config) (*client.EtcdHRCHYClient, error) {
 	var err error
 	if config.CertFile != "" && config.KeyFile != "" && config.CAFile != "" {
 		tlsInfo := transport.TLSInfo{
-			CertFile:      config.CertFile,
-			KeyFile:       config.KeyFile,
-			TrustedCAFile: config.CAFile,
+			CertFile:           config.CertFile,
+			KeyFile:            config.KeyFile,
+			TrustedCAFile:      config.CAFile,
+			InsecureSkipVerify: config.SkipVerifyTLS,
 		}
 		tlsConfig, err = tlsInfo.ClientConfig()
 		if err != nil {
@@ -25,10 +26,11 @@ func NewE3chClient(config *conf.Config) (*client.EtcdHRCHYClient, error) {
 	}
 
 	clt, err := clientv3.New(clientv3.Config{
-		Endpoints: config.EtcdEndPoints,
-		Username:  config.EtcdUsername,
-		Password:  config.EtcdPassword,
-		TLS:       tlsConfig,
+		Endpoints:   config.EtcdEndPoints,
+		Username:    config.EtcdUsername,
+		Password:    config.EtcdPassword,
+		TLS:         tlsConfig,
+		DialTimeout: config.EtcdDialTimeout,
 	})
 	if err != nil {
 		return nil, err
